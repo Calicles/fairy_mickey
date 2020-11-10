@@ -22,7 +22,7 @@ public class Game implements DecorListener, Controler {
 
     private void update()
     {
-
+        decor.update();
     }
 
     private void render()
