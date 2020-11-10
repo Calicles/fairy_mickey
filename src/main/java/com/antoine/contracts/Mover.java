@@ -17,4 +17,6 @@ public interface Mover {
     int getHeight();
 
     void setVector( int dx, int dy );
+
+    int getSpeed();
 }

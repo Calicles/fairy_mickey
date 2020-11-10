@@ -9,7 +9,7 @@ import java.io.IOException;
 
 public class RenderedDecorFactory {
 
-    static final String JSON_FILE_PATH = "";
+    static final String JSON_FILE_PATH = "jsons/decorImages.json";
     static org.json.JSONObject json;
 
     static {

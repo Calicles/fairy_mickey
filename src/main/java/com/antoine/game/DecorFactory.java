@@ -10,7 +10,7 @@ import java.util.HashMap;
 
 public class DecorFactory {
     static HashMap< Integer, Decor > container;
-    static final String JSON_FILE_PATH = "";
+    static final String JSON_FILE_PATH = "jsons/decor.json";
     static org.json.JSONObject json;
 
     static {
@@ -47,27 +47,23 @@ public class DecorFactory {
         for ( int i = 0; i < lineMask.length(); ++i )
         {
             JSONObject point = lineMask.getJSONObject( i );
-            decor.addPointToCurrentExit( point.getInt( "x" ), point.getInt( "y" ));
+            decor.addPointToMask( point.getInt( "x" ), point.getInt( "y" ));
         }
-
-        container.put( id, decor );
-        return null;
+        return decor;
     }
 
     static Decor_2D createDecor2D(JSONObject decor_json, int id)
     {
         Decor_2D decor = new Decor_2D( id );
         build( decor, decor_json );
-        container.put( id, decor );
-        return null;
+        return decor;
     }
 
     static Decor_with_key createDecorWithKey(JSONObject decor_json, int id)
     {
         Decor_with_key decor = new Decor_with_key( id );
         build( decor,  decor_json );
-        container.put( id, decor );
-        return null;
+        return decor;
     }
 
     static Decor getDecor( int id )
@@ -91,6 +87,7 @@ public class DecorFactory {
                 decor = createDecorWithKey( decor_json, id );
                 break;
         }
+        container.put( id, decor );
         return decor;
     }
 }
