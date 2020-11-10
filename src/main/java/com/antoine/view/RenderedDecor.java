@@ -1,17 +1,22 @@
 package com.antoine.view;
 
+import com.antoine.contracts.Direction;
+import com.antoine.contracts.RenderedEntity;
 import com.antoine.helpers.ImageReader;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
+import java.util.ArrayList;
+import java.util.HashMap;
 
-public class Abstract_RenderedDecor {
+public class RenderedDecor {
 
     protected int id;
     protected BufferedImage background_img;
     protected BufferedImage front_img;
 
-    Abstract_RenderedDecor( int id )
+
+    RenderedDecor( int id )
     {
         this.id = id;
     }
@@ -30,5 +35,9 @@ public class Abstract_RenderedDecor {
     public void renderFront(Graphics g)
     {
         g.drawImage( front_img, 0, 0, null );
+    }
+
+    public void drawEntities(Graphics g, RenderedEntity[] entities) {
+
     }
 }

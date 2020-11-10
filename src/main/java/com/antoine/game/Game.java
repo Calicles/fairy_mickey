@@ -1,12 +1,10 @@
 package com.antoine.game;
 
-import com.antoine.contracts.Decor;
-import com.antoine.contracts.DecorListener;
-import com.antoine.contracts.View;
+import com.antoine.contracts.*;
 import com.antoine.events.DecorChangeEvent;
 import com.antoine.model.Player;
 
-public class Game implements DecorListener {
+public class Game implements DecorListener, Controler {
 
     private boolean running;
     private Player player;
@@ -15,11 +13,12 @@ public class Game implements DecorListener {
     private View view;
     private Thread gameLoopThread;
 
-    Game()
+    public Game()
     {
         gameLoopThread = new Thread( this::run );
-        gameLoopThread.start();
     }
+
+
 
     private void update()
     {
@@ -28,9 +27,7 @@ public class Game implements DecorListener {
 
     private void render()
     {
-        // recuperer list de string/quotien
-        // set player rate and position direction
-        // set if key position
+        this.view.render( this.decor );
     }
 
     private void sleep( long sleep )
@@ -62,11 +59,32 @@ public class Game implements DecorListener {
 
             sleep( wait );
         }
+        this.view.onEndGame( new Game() );
     }
 
     @Override
     public void onDecorEnded(DecorChangeEvent event) {
         this.decor = DecorFactory.getDecor( event.getNextDecorId() );
         this.view.loadDecor( event.getNextDecorId() );
+    }
+
+    @Override
+    public void start() {
+        this.gameLoopThread.start();
+    }
+
+    @Override
+    public void addView(View view) {
+        this.view = view;
+    }
+
+    @Override
+    public void recordMove(Direction translate) {
+        player.Move( translate );
+    }
+
+    @Override
+    public void stopMotion() {
+        player.resetDelta();
     }
 }

@@ -1,6 +1,7 @@
 package com.antoine.game;
 
 import com.antoine.contracts.Decor;
+import com.antoine.helpers.JsonHelper;
 import com.antoine.model.*;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -16,16 +17,7 @@ public class DecorFactory {
     static org.json.JSONObject json;
 
     static {
-        try ( BufferedReader reader = new BufferedReader( new FileReader( (JSON_FILE_PATH )))) {
-            StringBuilder json_str = new StringBuilder();
-            char c;
-            while ( (c = (char) reader.read()) != -1 ) {
-                json_str.append( c );
-            }
-            json = new JSONObject( json_str.toString() );
-        } catch ( IOException exc ){
-            // handle error
-        }
+        json = JsonHelper.strToJson( JSON_FILE_PATH );
     }
 
     static void build( Abstract_Decor decor, JSONObject decor_json )
