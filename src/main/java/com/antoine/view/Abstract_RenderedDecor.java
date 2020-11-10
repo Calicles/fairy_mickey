@@ -1,0 +1,34 @@
+package com.antoine.view;
+
+import com.antoine.helpers.ImageReader;
+
+import java.awt.*;
+import java.awt.image.BufferedImage;
+
+public class Abstract_RenderedDecor {
+
+    protected int id;
+    protected BufferedImage background_img;
+    protected BufferedImage front_img;
+
+    Abstract_RenderedDecor( int id )
+    {
+        this.id = id;
+    }
+
+    public void loadImgs( String bg_img_name, String f_img_name )
+    {
+        background_img  = ImageReader.readImage( bg_img_name );
+        front_img       = ImageReader.readImage( f_img_name );
+    }
+
+    public void renderBackGround(Graphics g)
+    {
+        g.drawImage(this.background_img, 0, 0, null );
+    }
+
+    public void renderFront(Graphics g)
+    {
+        g.drawImage( front_img, 0, 0, null );
+    }
+}

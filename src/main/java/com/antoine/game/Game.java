@@ -2,6 +2,8 @@ package com.antoine.game;
 
 import com.antoine.contracts.Decor;
 import com.antoine.contracts.DecorListener;
+import com.antoine.contracts.View;
+import com.antoine.events.DecorChangeEvent;
 import com.antoine.model.Player;
 
 public class Game implements DecorListener {
@@ -10,6 +12,7 @@ public class Game implements DecorListener {
     private Player player;
     private Decor decor;
     //private Jukebox jukebox;
+    private View view;
     private Thread gameLoopThread;
 
     Game()
@@ -25,7 +28,9 @@ public class Game implements DecorListener {
 
     private void render()
     {
-
+        // recuperer list de string/quotien
+        // set player rate and position direction
+        // set if key position
     }
 
     private void sleep( long sleep )
@@ -57,5 +62,11 @@ public class Game implements DecorListener {
 
             sleep( wait );
         }
+    }
+
+    @Override
+    public void onDecorEnded(DecorChangeEvent event) {
+        this.decor = DecorFactory.getDecor( event.getNextDecorId() );
+        this.view.loadDecor( event.getNextDecorId() );
     }
 }
