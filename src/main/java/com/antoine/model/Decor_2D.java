@@ -2,6 +2,7 @@ package com.antoine.model;
 
 import com.antoine.contracts.Direction;
 import com.antoine.contracts.View;
+import com.antoine.helpers.Direction_helper;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -37,22 +38,18 @@ public class Decor_2D extends Abstract_Decor
 
     public void addPlayerEntrance( String dir_name, int _x, int _y )
     {
-        Direction direction;
+        Direction direction = Direction_helper.strToDir( dir_name );
         int x, y;
-        if ( dir_name.equals( "UP" ) ) {
-            direction = Direction.UP;
+        if ( direction == Direction.UP ) {
             x = _x;
             y = _y - player.getHeight();
-        } else if ( dir_name.equals( "DOWN" )) {
-            direction = Direction.BOTTOM;
+        } else if ( direction == Direction.BOTTOM) {
             x = _x;
             y = _y - player.getHeight();
-        } else if ( dir_name.equals( "RIGHT" )) {
-            direction = Direction.RIGHT;
+        } else if ( direction == Direction.RIGHT ) {
             x = _x;
             y = _y;
-        } else if ( dir_name.equals( "LEFT" )) {
-            direction = Direction.LEFT;
+        } else if ( direction == Direction.LEFT ) {
             x = _x - player.getWidth();
             y = _y;
         } else {

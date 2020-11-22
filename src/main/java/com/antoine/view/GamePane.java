@@ -4,6 +4,7 @@ import com.antoine.contracts.Decor;
 import com.antoine.contracts.Direction;
 import com.antoine.contracts.RenderedEntity;
 import com.antoine.contracts.RenderedMotionEntity;
+import com.antoine.helpers.Direction_helper;
 import com.antoine.helpers.ImageReader;
 import com.antoine.helpers.JsonHelper;
 import org.json.JSONArray;
@@ -29,40 +30,12 @@ public class GamePane extends JPanel
     GamePane()
     {
         super( true );
-        initPlayerImg();
+        loadPlayerImages();
     }
 
-    private void initPlayerImg() {
-        JSONObject json = JsonHelper.strToJson( FILE_NAME );
-        JSONArray arr;
-        for ( int i = 0; i < 4; ++i ) {
-            Direction d;
-            ArrayList< BufferedImage > images = new ArrayList<>( 4 );
-            if ( i == 0 ) {
-                arr = json.getJSONArray( "up" );
-                d = Direction.UP;
-            }
-            else if ( i == 1 ) {
-                arr = json.getJSONArray("bottom" );
-                d = Direction.BOTTOM;
-            }
-            else if ( i == 2 ) {
-                arr = json.getJSONArray( "left" );
-                d = Direction.LEFT;
-            }
-            else {
-                arr = json.getJSONArray( "right" );
-                d = Direction.RIGHT;
-            }
+    public int getPlayerWidth() { return player_imgs.get( Direction.LEFT).get( 0 ).getWidth(); }
 
-            for ( int j = 0; j < arr.length(); ++j ) {
-                images.add(
-                        ImageReader.readImage(
-                                arr.getString( j )));
-            }
-            this.player_imgs.put( d, images );
-        }
-    }
+    public int getPlayerHeight() { return player_imgs.get( Direction.LEFT).get( 0 ).getHeight(); }
 
     @Override
     public Dimension getPreferredSize() {
@@ -108,5 +81,23 @@ public class GamePane extends JPanel
 
     public void load(int nextDecorId) {
         this.rDecor = RenderedDecorFactory.getRenderedDecor( nextDecorId );
+    }
+
+    private void loadPlayerImages() {
+        JSONObject json = JsonHelper.strToJson( "/images/perso/perso.json" );
+        String path_prefix = json.getString( "global_path" );
+        JSONArray images_obj = json.getJSONArray( "paths" );
+        for ( int i = 0; i < images_obj.length(); i++ ) {
+            ArrayList< BufferedImage > list = new ArrayList<>(5 );
+            JSONObject obj = images_obj.getJSONObject( i );
+            Direction dir = Direction_helper.strToDir( obj.getString( "direction" ));
+            JSONArray images = obj.getJSONArray( "images" );
+            for ( int j = 0; j < images.length(); j++ ) {
+                list.add(
+                        ImageReader.readImage(
+                                path_prefix + images.getString( i )));
+            }
+            this.player_imgs.put( dir, list );
+        }
     }
 }

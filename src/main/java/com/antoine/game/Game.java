@@ -3,19 +3,23 @@ package com.antoine.game;
 import com.antoine.contracts.*;
 import com.antoine.events.DecorChangeEvent;
 import com.antoine.model.Player;
+import com.antoine.sound.Jukebox;
 
 public class Game implements DecorListener, Controler {
 
-    private boolean running;
+    private boolean running = true;
     private Player player;
     private Decor decor;
-    //private Jukebox jukebox;
+    private Jukebox jukebox;
     private View view;
     private Thread gameLoopThread;
 
     public Game()
     {
         gameLoopThread = new Thread( this::run );
+    }
+    public Game( Game game ) {
+        this.player = game.player;
     }
 
 
@@ -59,7 +63,19 @@ public class Game implements DecorListener, Controler {
 
             sleep( wait );
         }
-        this.view.onEndGame( new Game() );
+        this.view.onEndGame( new Game( this ) );
+    }
+
+    @Override
+    public void setPlayerWidth( int playerWidth )
+    {
+        this.player.setWidth( playerWidth );
+    }
+
+    @Override
+    public void setPlayerHeight( int playerHeight )
+    {
+        this.player.setHeight( playerHeight );
     }
 
     @Override

@@ -9,4 +9,8 @@ public interface Controler {
     void recordMove(Direction translate);
 
     void stopMotion();
+
+    void setPlayerWidth(int playerWidth);
+
+    void setPlayerHeight(int playerHeight);
 }

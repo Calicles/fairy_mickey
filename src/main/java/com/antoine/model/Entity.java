@@ -25,6 +25,10 @@ public class Entity implements RenderedEntity {
 
     public int getWidth() { return width; }
     public int getHeight() { return height; }
+
+    public void setWidth( int width ) { this.width = width; }
+    public void setHeight( int height ) { this.height = height; }
+
     @Override
     public int getX() {
         return coordinates.getX();

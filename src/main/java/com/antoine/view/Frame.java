@@ -56,6 +56,9 @@ public class Frame extends JFrame implements View
         container.add( this.gamePane, BorderLayout.CENTER );
         container.add( this.inventoryPane, BorderLayout.SOUTH );
 
+        controler.setPlayerWidth( this.gamePane.getPlayerWidth() );
+        controler.setPlayerHeight( this.gamePane.getPlayerHeight() );
+
         this.controler.start();
     }
 

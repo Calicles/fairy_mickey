@@ -26,4 +26,19 @@ public class Direction_helper {
         }
         return Direction.BOTTOM;
     }
+
+    public static Direction strToDir( String dir_str )
+    {
+        if ( dir_str.equals( "UP" )) {
+            return Direction.UP;
+        } else if ( dir_str.equals( "DOWN" )) {
+            return Direction.BOTTOM;
+        }else if ( dir_str.equals( "RIGHT" )) {
+            return Direction.RIGHT;
+        }else if ( dir_str.equals( "LEFT" )) {
+            return Direction.LEFT;
+        } else {
+            throw new IllegalArgumentException( "bad direction parameter" );
+        }
+    }
 }
