@@ -56,6 +56,29 @@ public class DecorFactory {
     {
         Decor_2D decor = new Decor_2D( id );
         build( decor, decor_json );
+        // add all solids presents in map
+        JSONArray solids = decor_json.getJSONArray( "solids" );
+        for (int i = 0; i < solids.length(); i++) {
+            decor.createShape();
+            JSONArray solids_points =  solids.getJSONArray( i );
+            for (int j = 0; j < solids_points.length(); j++) {
+                JSONObject point = solids_points.getJSONObject( j );
+                decor.addPointToCurrentShape(
+                        point.getInt( "x" ),
+                        point.getInt( "y" )
+                );
+            }
+        }
+        // add entrance player position by player direction
+        JSONArray entrances = decor_json.getJSONArray( "entrance_player_direction_coordinates" );
+        for (int i = 0; i < entrances.length(); i++) {
+            JSONObject entry = entrances.getJSONObject( i );
+            JSONObject point_json = entry.getJSONObject( "position" );
+            decor.addPlayerEntrance(
+                    entry.getString( "name" ),
+                    point_json.getInt( "x" ),
+                    point_json.getInt( " y" ));
+        }
         return decor;
     }
 
