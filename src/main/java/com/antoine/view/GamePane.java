@@ -3,7 +3,7 @@ package com.antoine.view;
 import com.antoine.contracts.Decor;
 import com.antoine.contracts.Direction;
 import com.antoine.contracts.RenderedEntity;
-import com.antoine.contracts.RenderedMotionEntity;
+import com.antoine.game.DecorFactory;
 import com.antoine.helpers.Direction_helper;
 import com.antoine.helpers.ImageReader;
 import com.antoine.helpers.JsonHelper;
@@ -18,7 +18,7 @@ import java.util.HashMap;
 
 public class GamePane extends JPanel
 {
-    private RenderedDecor rDecor;
+    private RenderedDecor rDecor = RenderedDecorFactory.getRenderedDecor( 1 );
     private HashMap<Direction, ArrayList<BufferedImage>> player_imgs;
     private RenderedEntity[] entities;
     private final String FILE_NAME = "";
@@ -30,7 +30,9 @@ public class GamePane extends JPanel
     GamePane()
     {
         super( true );
+        this.player_imgs = new HashMap<>( 4 );
         loadPlayerImages();
+        this.setSize( this.rDecor.getWidth(), this.rDecor.getHeight() );
     }
 
     public int getPlayerWidth() { return player_imgs.get( Direction.LEFT).get( 0 ).getWidth(); }
@@ -39,7 +41,7 @@ public class GamePane extends JPanel
 
     @Override
     public Dimension getPreferredSize() {
-        return null;
+        return new Dimension( this.rDecor.getWidth(), this.rDecor.getHeight() );
     }
 
     /**
@@ -52,8 +54,10 @@ public class GamePane extends JPanel
 
         rDecor.renderBackGround( g );
 
+        g.drawImage( this.player_imgs.get( Direction.BOTTOM ).get( 0 ), 200, 320, null );
+
         // draw player and apply scale size
-        RenderedMotionEntity player = (RenderedMotionEntity) this.entities[0];
+/*        RenderedMotionEntity player = (RenderedMotionEntity) this.entities[0];
         BufferedImage pl_img;
         if ( player.isMoving() ) {
             pl_img = this.player_imgs.get( player.getDirection() ).get( this.player_sprite_index );
@@ -66,7 +70,7 @@ public class GamePane extends JPanel
         int width = pl_img.getWidth(), height = pl_img.getHeight();
         g.drawImage( pl_img, player.getX(), player.getY(), width, height, null );
 
-        rDecor.drawEntities( g, entities );
+        rDecor.drawEntities( g, entities );*/
 
         rDecor.renderFront( g );
 
@@ -76,6 +80,7 @@ public class GamePane extends JPanel
     public void render( Decor decor )
     {
         this.entities = decor.getEntities();
+        revalidate();
         this.repaint();
     }
 
@@ -84,7 +89,7 @@ public class GamePane extends JPanel
     }
 
     private void loadPlayerImages() {
-        JSONObject json = JsonHelper.strToJson( "/images/perso/perso.json" );
+        JSONObject json = JsonHelper.strToJson("/jsons/perso.json");
         String path_prefix = json.getString( "global_path" );
         JSONArray images_obj = json.getJSONArray( "paths" );
         for ( int i = 0; i < images_obj.length(); i++ ) {

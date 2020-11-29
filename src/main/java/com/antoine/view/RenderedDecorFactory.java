@@ -9,15 +9,25 @@ import java.io.IOException;
 
 public class RenderedDecorFactory {
 
-    static final String JSON_FILE_PATH = "jsons/decorImages.json";
-    static org.json.JSONObject json;
+    private static final String JSON_FILE_PATH = "/jsons/decorImages.json";
+    private static final String IMG_PATH       = "/images/decor/";
+    private static JSONObject json;
 
     static {
-        json = JsonHelper.strToJson( JSON_FILE_PATH );
+        try
+        {
+            json = JsonHelper.strToJson( JSON_FILE_PATH );
+        } catch ( ExceptionInInitializerError e ) {
+            System.out.println( e.getMessage());
+        }
     }
 
     public static RenderedDecor getRenderedDecor( int id )
     {
-        return null;
+        JSONObject decor_json = json.getJSONObject( Integer.toString( id ));
+        String path = IMG_PATH + decor_json.getString( "path" );
+        RenderedDecor decor = new RenderedDecor( id );
+        decor.loadImgs( path + decor_json.getString( "bg" ), path + decor_json.getString( "fg" ));
+        return decor;
     }
 }

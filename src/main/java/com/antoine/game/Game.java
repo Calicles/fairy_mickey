@@ -16,6 +16,9 @@ public class Game implements DecorListener, Controler {
 
     public Game()
     {
+        this.player = new Player( 0, 0, 4 );
+        DecorFactory.setPlayer( this.player );
+
         gameLoopThread = new Thread( this::run );
     }
     public Game( Game game ) {
@@ -43,6 +46,8 @@ public class Game implements DecorListener, Controler {
 
     void run()
     {
+        this.decor = DecorFactory.getDecor( 1 );
+
         // Time gestioner
         final long FPS_TARGET = 60;
         final long OPTIMAL_TIME = 1000000000 / FPS_TARGET;

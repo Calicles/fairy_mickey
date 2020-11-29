@@ -9,12 +9,16 @@ public class MenuPane extends JPanel
         void execute();
     }
 
+    private int width;
+    private int height;
     private final Command triggerNewGame;
 
-    public MenuPane( Command onNewGame ) {
+    public MenuPane( Command onNewGame, int _width, int _height ) {
         super();
 
-        triggerNewGame = onNewGame;
+        this.width          = _width;
+        this.height         = _height;
+        this.triggerNewGame = onNewGame;
         this.setLayout( new BorderLayout() );
         JButton newGameButton = new JButton( "NEW GAME" );
         newGameButton.addActionListener( ( event )->this.triggerNewGame.execute() );
@@ -25,6 +29,6 @@ public class MenuPane extends JPanel
     @Override
     public Dimension getPreferredSize()
     {
-        return null;
+        return new Dimension( this.width, this.height );
     }
 }

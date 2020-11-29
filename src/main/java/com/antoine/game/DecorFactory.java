@@ -9,8 +9,8 @@ import org.json.JSONObject;
 import java.util.HashMap;
 
 public class DecorFactory {
-    static HashMap< Integer, Decor > container;
-    static final String JSON_FILE_PATH = "jsons/decor.json";
+    static HashMap< Integer, Decor > container = new HashMap<>( 10 );
+    static final String JSON_FILE_PATH = "/jsons/decor.json";
     static org.json.JSONObject json;
 
     static {
@@ -77,7 +77,7 @@ public class DecorFactory {
             decor.addPlayerEntrance(
                     entry.getString( "name" ),
                     point_json.getInt( "x" ),
-                    point_json.getInt( " y" ));
+                    point_json.getInt( "y" ));
         }
         return decor;
     }
@@ -112,5 +112,11 @@ public class DecorFactory {
         }
         container.put( id, decor );
         return decor;
+    }
+
+
+    public static void setPlayer( Player player )
+    {
+        Abstract_Decor.setPlayer( player );
     }
 }

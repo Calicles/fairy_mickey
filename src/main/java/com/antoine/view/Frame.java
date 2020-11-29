@@ -5,6 +5,9 @@ import com.antoine.contracts.Decor;
 import com.antoine.contracts.Direction;
 import com.antoine.contracts.View;
 import com.antoine.events.PlayerGrabKeyEvent;
+import com.antoine.helpers.JsonHelper;
+import org.json.JSONObject;
+import org.json.JSONTokener;
 
 import javax.swing.*;
 import java.awt.*;
@@ -22,13 +25,15 @@ public class Frame extends JFrame implements View
     {
         super("Fairy_Mickey" );
 
+        JSONObject conf = JsonHelper.strToJson( "/jsons/conf.json");
+
         this.initControler( controler );
 
         Container container = this.getContentPane();
 
         container.setLayout( new BorderLayout() );
 
-        this.menuPane = new MenuPane( this::onNewGame );
+        this.menuPane = new MenuPane( this::onNewGame, conf.getInt( "width" ), conf.getInt( "height" ));
         container.add( menuPane, BorderLayout.CENTER );
 
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -49,17 +54,20 @@ public class Frame extends JFrame implements View
         Container container = this.getContentPane();
 
         container.remove( this.menuPane );
+        container.getLayout().removeLayoutComponent( this.menuPane );
 
         this.gamePane       = new GamePane();
         this.inventoryPane  = new InventoryPane();
 
         container.add( this.gamePane, BorderLayout.CENTER );
-        container.add( this.inventoryPane, BorderLayout.SOUTH );
+        //container.add( this.inventoryPane );
 
         controler.setPlayerWidth( this.gamePane.getPlayerWidth() );
         controler.setPlayerHeight( this.gamePane.getPlayerHeight() );
 
         this.controler.start();
+        revalidate();
+        this.repaint();
     }
 
     @Override

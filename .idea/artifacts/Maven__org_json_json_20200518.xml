@@ -1,0 +1,10 @@
+<component name="ArtifactManager">
+  <artifact name="Maven__org_json_json_20200518">
+    <output-path>$PROJECT_DIR$/out/artifacts/Maven__org_json_json_20200518</output-path>
+    <root id="root">
+      <element id="archive" name="fairy_mickey.jar">
+        <element id="module-output" name="fairy_mickey" />
+      </element>
+    </root>
+  </artifact>
+</component>

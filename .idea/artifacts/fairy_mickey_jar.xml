@@ -1,0 +1,15 @@
+<component name="ArtifactManager">
+  <artifact name="fairy_mickey:jar">
+    <output-path>$PROJECT_DIR$/out/artifacts/fairy_mickey_jar</output-path>
+    <root id="root">
+      <element id="archive" name="fairy_mickey.jar">
+        <element id="directory" name="META-INF">
+          <element id="file-copy" path="$PROJECT_DIR$/src/main/java/META-INF/MANIFEST.MF" />
+        </element>
+        <element id="module-output" name="fairy_mickey" />
+        <element id="artifact" artifact-name="Maven__org_json_json_20200518" />
+      </element>
+      <element id="library" level="project" name="Maven: org.json:json:20200518" />
+    </root>
+  </artifact>
+</component>

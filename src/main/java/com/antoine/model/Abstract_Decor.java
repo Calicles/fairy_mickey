@@ -35,6 +35,11 @@ public abstract class Abstract_Decor implements Decor {
         this.player = _p;
     }
 
+    public static void setPlayer( Player _player )
+    {
+        Abstract_Decor.player = _player;
+    }
+
     @Override
     public RenderedEntity[] getEntities(){
         RenderedEntity[] tab = new RenderedEntity[1];
