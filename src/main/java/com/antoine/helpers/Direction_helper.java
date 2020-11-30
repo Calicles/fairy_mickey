@@ -15,6 +15,18 @@ public class Direction_helper {
         return com.antoine.contracts.Direction.RIGHT;
     }
 
+    public static int DirToInt( Direction direction )
+    {
+        switch ( direction )
+        {
+            case UP: return 0;
+            case BOTTOM: return 1;
+            case LEFT: return 2;
+            case RIGHT: return 3;
+        }
+        return 0;
+    }
+
     public static Direction getInversDir( Direction dir )
     {
         switch ( dir )

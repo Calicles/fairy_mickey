@@ -34,4 +34,13 @@ public class Point {
     public int getY() {
         return y;
     }
+
+    public String toString()
+    {
+        StringBuffer buff = new StringBuffer();
+        buff.append( "x: " + x );
+        buff.append(", y: " + y );
+
+        return buff.toString();
+    }
 }

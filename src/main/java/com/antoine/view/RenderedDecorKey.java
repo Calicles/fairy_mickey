@@ -23,7 +23,7 @@ public class RenderedDecorKey extends RenderedDecor {
     }
 
     @Override
-    public void drawEntities(Graphics g, RenderedEntity[] entities )
+    protected void drawEntities(Graphics g, RenderedEntity[] entities )
     {
         super.drawEntities( g, entities );
         RenderedMotionEntity player = (RenderedMotionEntity) entities[0];

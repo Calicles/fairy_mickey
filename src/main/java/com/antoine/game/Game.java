@@ -5,6 +5,8 @@ import com.antoine.events.DecorChangeEvent;
 import com.antoine.model.Player;
 import com.antoine.sound.Jukebox;
 
+import java.awt.*;
+
 public class Game implements DecorListener, Controler {
 
     private boolean running = true;
@@ -17,6 +19,7 @@ public class Game implements DecorListener, Controler {
     public Game()
     {
         this.player = new Player( 0, 0, 4 );
+        this.player.setDirection( Direction.UP );
         DecorFactory.setPlayer( this.player );
 
         gameLoopThread = new Thread( this::run );
@@ -47,6 +50,7 @@ public class Game implements DecorListener, Controler {
     void run()
     {
         this.decor = DecorFactory.getDecor( 1 );
+        this.decor.setEntringPlayerCoordinates();
 
         // Time gestioner
         final long FPS_TARGET = 60;
@@ -100,8 +104,8 @@ public class Game implements DecorListener, Controler {
     }
 
     @Override
-    public void recordMove(Direction translate) {
-        player.Move( translate );
+    public void recordMove(Direction direction) {
+        player.Move( direction );
     }
 
     @Override

@@ -1,6 +1,8 @@
 package com.antoine.game;
 
 import com.antoine.contracts.Decor;
+import com.antoine.contracts.Direction;
+import com.antoine.helpers.Direction_helper;
 import com.antoine.helpers.JsonHelper;
 import com.antoine.model.*;
 import org.json.JSONArray;
@@ -12,9 +14,11 @@ public class DecorFactory {
     static HashMap< Integer, Decor > container = new HashMap<>( 10 );
     static final String JSON_FILE_PATH = "/jsons/decor.json";
     static org.json.JSONObject json;
+    static double dim_coef;
 
     static {
         json = JsonHelper.strToJson( JSON_FILE_PATH );
+        dim_coef = JsonHelper.strToJson( "/jsons/conf.json" ).getDouble( "dim_coef" );
     }
 
     static void build( Abstract_Decor decor, JSONObject decor_json )
@@ -31,8 +35,8 @@ public class DecorFactory {
 
             // add point to exit shape
             for ( int j = 0; j < points.length(); ++j ){
-                JSONObject p = points.getJSONObject( i );
-                decor.addPointToCurrentExit( p.getInt( "x" ), p.getInt( "y" ));
+                JSONObject p = points.getJSONObject( j );
+                decor.addPointToCurrentExit( (int) ( p.getInt( "x" ) * dim_coef ), (int) ( p.getInt( "y" ) * dim_coef ));
             }
         }
     }
@@ -64,8 +68,8 @@ public class DecorFactory {
             for (int j = 0; j < solids_points.length(); j++) {
                 JSONObject point = solids_points.getJSONObject( j );
                 decor.addPointToCurrentShape(
-                        point.getInt( "x" ),
-                        point.getInt( "y" )
+                        (int) ( point.getInt( "x" ) * dim_coef ),
+                        (int) (point.getInt( "y" ) * dim_coef )
                 );
             }
         }
@@ -76,8 +80,8 @@ public class DecorFactory {
             JSONObject point_json = entry.getJSONObject( "position" );
             decor.addPlayerEntrance(
                     entry.getString( "name" ),
-                    point_json.getInt( "x" ),
-                    point_json.getInt( "y" ));
+                    (int) ( point_json.getInt( "x" ) * dim_coef ),
+                    (int) ( point_json.getInt( "y" ) * dim_coef ));
         }
         return decor;
     }
@@ -111,6 +115,8 @@ public class DecorFactory {
                 break;
         }
         container.put( id, decor );
+        decor.setPlayerLastDirection(
+                Direction_helper.strToDir( decor_json.getString( "player_entrance_direction" )));
         return decor;
     }
 

@@ -3,12 +3,16 @@ package com.antoine.view;
 import com.antoine.contracts.Decor;
 import com.antoine.contracts.Direction;
 import com.antoine.contracts.RenderedEntity;
-import com.antoine.game.DecorFactory;
 import com.antoine.helpers.Direction_helper;
 import com.antoine.helpers.ImageReader;
 import com.antoine.helpers.JsonHelper;
+import com.antoine.model.Shape;
+import com.antoine.physics.ColliderChecker;
 import org.json.JSONArray;
 import org.json.JSONObject;
+
+//TODO rmove
+import com.antoine.model.Point;
 
 import javax.swing.*;
 import java.awt.*;
@@ -18,26 +22,32 @@ import java.util.HashMap;
 
 public class GamePane extends JPanel
 {
-    private RenderedDecor rDecor = RenderedDecorFactory.getRenderedDecor( 1 );
-    private HashMap<Direction, ArrayList<BufferedImage>> player_imgs;
+    private RenderedDecor rDecor;
     private RenderedEntity[] entities;
     private final String FILE_NAME = "";
     private int player_sprite_index;
     private int anim_slower;
+    private double dim_coef;
     private final int ANIM_SLOWER_MAX = 4;
 
+    // TODO remode
+    private ArrayList< Point >[] boxes;
+    private ArrayList< Point >[] solids;
+    private Shape collision;
 
-    GamePane()
+
+    GamePane( double _dim_coef )
     {
         super( true );
-        this.player_imgs = new HashMap<>( 4 );
+        this.dim_coef = _dim_coef;
+        RenderedDecor.setDim_Coef( this.dim_coef );
+        this.rDecor = RenderedDecorFactory.getRenderedDecor( 1 );
         loadPlayerImages();
-        this.setSize( this.rDecor.getWidth(), this.rDecor.getHeight() );
     }
 
-    public int getPlayerWidth() { return player_imgs.get( Direction.LEFT).get( 0 ).getWidth(); }
+    public int getPlayerWidth() { return RenderedDecor.getPlayerWidth(); }
 
-    public int getPlayerHeight() { return player_imgs.get( Direction.LEFT).get( 0 ).getHeight(); }
+    public int getPlayerHeight() { return RenderedDecor.getPlayerHeight(); }
 
     @Override
     public Dimension getPreferredSize() {
@@ -52,34 +62,69 @@ public class GamePane extends JPanel
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
 
-        rDecor.renderBackGround( g );
+        this.rDecor.render( g, this.entities );
 
-        g.drawImage( this.player_imgs.get( Direction.BOTTOM ).get( 0 ), 200, 320, null );
+        Color oldColor = g.getColor();
 
-        // draw player and apply scale size
-/*        RenderedMotionEntity player = (RenderedMotionEntity) this.entities[0];
-        BufferedImage pl_img;
-        if ( player.isMoving() ) {
-            pl_img = this.player_imgs.get( player.getDirection() ).get( this.player_sprite_index );
-            if ((++anim_slower % ANIM_SLOWER_MAX) == 0 ) this.player_sprite_index ++;
+        g.setColor( Color.BLACK );
+
+        for ( int i = 0; i < boxes.length; i++ )
+        {
+            for ( int j = 0; j < boxes[i].size(); j++ )
+            {
+                int x2, y2;
+                if ( j == boxes[i].size() - 1 ){
+                    x2 = boxes[i].get(0).getX();
+                    y2 = boxes[i].get(0).getY();
+                } else
+                {
+                    x2 = boxes[i].get( j+1).getX();
+                    y2 = boxes[i].get(j+1).getY();
+                }
+                g.drawLine( boxes[i].get(j).getX(), boxes[i].get(j).getY(), x2, y2);
+            }
         }
-        else {
-            pl_img = this.player_imgs.get( player.getDirection() ).get( 0 );
+        g.setColor( Color.CYAN );
+        for ( int i = 0; i < solids.length; i++ )
+        {
+            for ( int j = 0; j < solids[i].size(); j++ )
+            {
+                int x2, y2;
+                if ( j == solids[i].size() - 1 ){
+                    x2 = solids[i].get(0).getX();
+                    y2 = solids[i].get(0).getY();
+                } else
+                {
+                    x2 = solids[i].get( j+1).getX();
+                    y2 = solids[i].get(j+1).getY();
+                }
+                g.drawLine( solids[i].get(j).getX(), solids[i].get(j).getY(), x2, y2);
+            }
         }
 
-        int width = pl_img.getWidth(), height = pl_img.getHeight();
-        g.drawImage( pl_img, player.getX(), player.getY(), width, height, null );
+        g.setColor( Color.MAGENTA );
 
-        rDecor.drawEntities( g, entities );*/
+        if ( ColliderChecker.collide != null )
+        {
+            System.out.println("in render");
+            Point p1 = ColliderChecker.collide.p1;
+            Point p2 = ColliderChecker.collide.p2;
+                g.drawLine(p1.getX(), p1.getY(), p2.getX(), p2.getY());
+                RenderedEntity p = (RenderedEntity) entities[0];
+                g.drawLine( p.getX(), p.getY(), p.getX() + p.getWidth(), p.getY());
+        }
 
-        rDecor.renderFront( g );
-
+        g.setColor( oldColor );
         g.dispose();
     }
 
     public void render( Decor decor )
     {
         this.entities = decor.getEntities();
+        // TODO REMOVE TWICE
+        this.boxes = decor.getExit();
+        this.solids = decor.getLines();
+        this.collision = decor.getCollision();
         revalidate();
         this.repaint();
     }
@@ -92,6 +137,7 @@ public class GamePane extends JPanel
         JSONObject json = JsonHelper.strToJson("/jsons/perso.json");
         String path_prefix = json.getString( "global_path" );
         JSONArray images_obj = json.getJSONArray( "paths" );
+        HashMap< Direction, ArrayList< BufferedImage >> player_imgs = new HashMap<>( 4 );
         for ( int i = 0; i < images_obj.length(); i++ ) {
             ArrayList< BufferedImage > list = new ArrayList<>(5 );
             JSONObject obj = images_obj.getJSONObject( i );
@@ -102,7 +148,9 @@ public class GamePane extends JPanel
                         ImageReader.readImage(
                                 path_prefix + images.getString( i )));
             }
-            this.player_imgs.put( dir, list );
+            player_imgs.put( dir, list );
         }
+
+        RenderedDecor.setPlayerImgs( player_imgs );
     }
 }

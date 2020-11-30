@@ -20,6 +20,8 @@ public class Decor_1D extends Abstract_Decor
 
     @Override
     public void update() {
+        // TODO remove
+        this.player.translate();
         if ( player.isMoving() ) {
             ColliderChecker.adaptVectorToLine( player, line_mask );
         }

@@ -5,4 +5,8 @@ public interface RenderedEntity {
     int getY();
 
     void setSize( int width, int height );
+
+    int getWidth();
+
+    int getHeight();
 }

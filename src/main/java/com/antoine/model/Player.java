@@ -22,6 +22,9 @@ public class Player extends Entity implements Mover, RenderedMotionEntity {
         this.speed = _speed;
     }
 
+    public void setDirection( Direction _dir ) { this.current_direction = _dir; }
+    public void setPosition( int x, int y ) { this.coordinates.setPosition( x, y ); }
+    public void setPosition( Point p ) { this.coordinates.setPosition( p );}
     public Direction getDirection() { return this.current_direction; }
 
     @Override
@@ -38,6 +41,11 @@ public class Player extends Entity implements Mover, RenderedMotionEntity {
     public void setVector(int dx, int dy) {
         this.dx = dx;
         this.dy = dy;
+    }
+
+    public void translate()
+    {
+        this.coordinates.translate( this.dx, this.dy );
     }
 
     @Override
@@ -58,28 +66,26 @@ public class Player extends Entity implements Mover, RenderedMotionEntity {
         }
     }
 
-    public Direction getCurrent_direction() { return this.current_direction; }
-
-    public void setDirection( Direction _dir ) { this.current_direction = _dir; }
-    public void setPosition( int x, int y ) { this.coordinates.setPosition( x, y ); }
-    public void setPosition( Point p ) { this.coordinates.setPosition( p );}
 
     public void resetDelta() {
         this.dx = 0;
         this.dy = 0;
     }
 
-    public void Move(Direction translate) {
-        if ( this.current_direction != translate ) this.current_direction = translate;
+    public void Move(Direction moveDirection) {
+        if ( this.current_direction != moveDirection ) {
+            this.current_direction = moveDirection;
+        }
 
-        switch ( translate ) {
+        switch ( moveDirection ) {
             case UP: dx = 0; dy = -speed;
                 break;
             case BOTTOM: dx = 0; dy = speed;
-                break;
+                    break;
             case LEFT: dx = -speed; dy = 0;
-                break;
+                    break;
             case RIGHT: dx = speed; dy = 0;
         }
+
     }
 }
