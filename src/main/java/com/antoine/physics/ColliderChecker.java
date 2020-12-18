@@ -13,11 +13,11 @@ public class ColliderChecker {
 
     public static Line collide;
 
-    private static int INSIDE = 0;
-    private static int LEFT   = 1;
-    private static int RIGHT  = 2;
-    private static int BOTTOM = 4;
-    private static int TOP    = 8;
+    private static final int INSIDE = 0;
+    private static final int LEFT   = 1;
+    private static final int RIGHT  = 2;
+    private static final int BOTTOM = 4;
+    private static final int TOP    = 8;
 
     private int computeOutCode( double x, double y, AABB frame )
     {
@@ -42,6 +42,8 @@ public class ColliderChecker {
         int outCode0 = computeOutCode( start.getX(), start.getY(), frame );
         int outCode1 = computeOutCode( end.getX(), end.getY(), frame );
 
+        double x0 = start.getX(), y0 = start.getY(), x1 = end.getX(), y1 = end.getY();
+
         boolean isCollide = false;
 
         while ( true ) {
@@ -51,29 +53,45 @@ public class ColliderChecker {
             } else if (( outCode0 & outCode1 ) != 0 ) {
                 break;
             } else {
-                double x, y;
+                double x = 0, y = 0;
                 int outCode = ( outCode1 > outCode0 ) ? outCode1 : outCode0;
 
+
+                // Now find the intersection point;
+                // use formulas:
+                //   slope = (y1 - y0) / (x1 - x0)
+                //   x = x0 + (1 / slope) * (ym - y0), where ym is ymin or ymax
+                //   y = y0 + slope * (xm - x0), where xm is xmin or xmax
+                // No need to worry about divide-by-zero because, in each case, the
+                // outcode bit being tested guarantees the denominator is non-zero
                 if (( outCode & TOP ) != 0 ) {
-
+                    x = start.getX() + ( x1 - x0 ) * ( frame.getMaxY() - y0 ) / ( y1 - y0 );
+                    y = frame.getMaxY();
                 }else if (( outCode & BOTTOM) != 0 ) {
-
+                    x = start.getX() + ( x1 - x0 ) * ( frame.getMinY() - y0 ) /  ( y1 - y0 );
+                    y = frame.getMinY();
                 } else if (( outCode & LEFT ) != 0 ) {
-
+                    x = frame.getMaxX();
+                    y = start.getY() + ( y1 - y0 ) * ( frame.getMaxX() - x0 ) / ( x1 - x0 );
                 } else if (( outCode & RIGHT ) != 0 ) {
-
+                    x = frame.getMinX();
+                    y = start.getY() + ( y1 - y0 ) * ( frame.getMinX() - x0 ) / ( x1 - x0 );
                 }
 
                 // Clip another intersect point for next pass
                 if ( outCode == outCode0 ) {
-
+                    x0 = x;
+                    y0 = y;
+                    outCode0 = computeOutCode( x0, y0, frame );
                 } else {
-
+                    x1 = x;
+                    y1 = y;
+                    outCode1 = computeOutCode( x1, y1, frame );
                 }
             }
         }
 
-        return false;
+        return isCollide;
     }
 
     public static Shape seekCollide(Mover mover, ArrayList< Shape > shapes )
