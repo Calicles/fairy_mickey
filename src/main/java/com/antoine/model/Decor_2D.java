@@ -29,9 +29,9 @@ public class Decor_2D extends Abstract_Decor
         // TODO remove
         if ( this.player.isMoving() )
         {
-            if (( this.collision = ColliderChecker.seekCollide( this.player, this.obstacle_mask )) == null ) {
+            //if (( this.collision = ColliderChecker.seekCollide( this.player, this.obstacle_mask )) == null ) {
                 this.player.translate();
-            }
+            //}
         }
     }
     //TODO REMOVE
