@@ -1,0 +1,18 @@
+{
+  "global_path": "/images/perso/final/",
+  "paths":
+  [
+    {
+      "direction": "UP", "images": ["up1.png","up2.png","up3.png","up4.png","up5.png"]
+    },
+    {
+      "direction": "DOWN", "images": ["down1.png","down2.png","down3.png","down4.png","down5.png"]
+    },
+    {
+      "direction":"RIGHT","images": ["right1.png","right2.png","right3.png","right4.png","right5.png"]
+    },
+    {
+      "direction":"LEFT","images": ["left1.png","left2.png","left3.png","left4.png","left5.png"]
+    }
+  ]
+}
