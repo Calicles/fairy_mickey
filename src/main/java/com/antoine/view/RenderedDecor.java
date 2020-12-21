@@ -77,16 +77,16 @@ public class RenderedDecor {
     }
 
     protected void drawEntities(Graphics g, RenderedEntity[] entities) {
-        RenderedMotionEntity player = (RenderedMotionEntity) entities[0];
-        //System.out.println(player.getDirection());
-        //System.out.println(Direction_helper.DirToInt(player.getDirection()));
-        g.drawImage(
-                player_imgs.get( player.getDirection() ).get( 0 ),
-                player.getX(),
-                player.getY(),
-                player.getWidth(),
-                player.getHeight(),
-                null
-        );
+        if ( entities != null ) {
+            RenderedMotionEntity player = (RenderedMotionEntity) entities[0];
+            g.drawImage(
+                    player_imgs.get( player.getDirection() ).get( 0 ),
+                    player.getX(),
+                    player.getY(),
+                    player.getWidth(),
+                    player.getHeight(),
+                    null
+            );
+        }
     }
 }

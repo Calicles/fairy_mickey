@@ -106,12 +106,11 @@ public class GamePane extends JPanel
 
         if ( ColliderChecker.collide != null )
         {
-            System.out.println("in render");
             Point p1 = ColliderChecker.collide.p1;
             Point p2 = ColliderChecker.collide.p2;
                 g.drawLine(p1.getX(), p1.getY(), p2.getX(), p2.getY());
                 RenderedEntity p = (RenderedEntity) entities[0];
-                g.drawLine( p.getX(), p.getY(), p.getX() + p.getWidth(), p.getY());
+                g.drawLine( p.getX(), p.getY() + p.getHeight() - 10, p.getX() + p.getWidth(), p.getY() + p.getHeight() - 10);
         }
 
         g.setColor( oldColor );

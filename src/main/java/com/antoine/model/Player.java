@@ -76,7 +76,6 @@ public class Player extends Entity implements Mover, RenderedMotionEntity {
         if ( this.current_direction != moveDirection ) {
             this.current_direction = moveDirection;
         }
-
         switch ( moveDirection ) {
             case UP: dx = 0; dy = -speed;
                 break;
@@ -86,6 +85,5 @@ public class Player extends Entity implements Mover, RenderedMotionEntity {
                     break;
             case RIGHT: dx = speed; dy = 0;
         }
-
     }
 }

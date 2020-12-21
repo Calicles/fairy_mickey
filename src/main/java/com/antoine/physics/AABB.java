@@ -15,6 +15,14 @@ public class AABB {
         this.height = _height;
     }
 
+    public void setCoor( int x, int y ) {
+        this.coor.setPosition( x, y );
+    }
+
+    public void translate( int dx, int dy ) {
+        this.coor.translate( dx, dy );
+    }
+
     public int getMinX()
     {
         return this.coor.getX();

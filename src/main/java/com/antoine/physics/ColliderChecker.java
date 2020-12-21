@@ -13,86 +13,14 @@ public class ColliderChecker {
 
     public static Line collide;
 
+    public static CohenSutherland cs = new CohenSutherland();
+
     private static final int INSIDE = 0;
     private static final int LEFT   = 1;
     private static final int RIGHT  = 2;
     private static final int BOTTOM = 4;
     private static final int TOP    = 8;
 
-    private int computeOutCode( double x, double y, AABB frame )
-    {
-        int code = INSIDE;
-
-        if ( x < frame.getMinX() ) {
-            code |= LEFT;
-        } else if ( x > frame.getMaxX() ) {
-            code |= RIGHT;
-        } else if ( y < frame.getMinY() ) {
-            code |= TOP;
-        } else if ( y > frame.getMaxY() ) {
-            code |= BOTTOM;
-        }
-
-        return code;
-    }
-
-
-    private boolean cohenSutherlandClip( Point start, Point end, AABB frame )
-    {
-        int outCode0 = computeOutCode( start.getX(), start.getY(), frame );
-        int outCode1 = computeOutCode( end.getX(), end.getY(), frame );
-
-        double x0 = start.getX(), y0 = start.getY(), x1 = end.getX(), y1 = end.getY();
-
-        boolean isCollide = false;
-
-        while ( true ) {
-            if (( outCode0 | outCode1 ) == 0 ) {
-                isCollide = true;
-                break;
-            } else if (( outCode0 & outCode1 ) != 0 ) {
-                break;
-            } else {
-                double x = 0, y = 0;
-                int outCode = ( outCode1 > outCode0 ) ? outCode1 : outCode0;
-
-
-                // Now find the intersection point;
-                // use formulas:
-                //   slope = (y1 - y0) / (x1 - x0)
-                //   x = x0 + (1 / slope) * (ym - y0), where ym is ymin or ymax
-                //   y = y0 + slope * (xm - x0), where xm is xmin or xmax
-                // No need to worry about divide-by-zero because, in each case, the
-                // outcode bit being tested guarantees the denominator is non-zero
-                if (( outCode & TOP ) != 0 ) {
-                    x = start.getX() + ( x1 - x0 ) * ( frame.getMaxY() - y0 ) / ( y1 - y0 );
-                    y = frame.getMaxY();
-                }else if (( outCode & BOTTOM) != 0 ) {
-                    x = start.getX() + ( x1 - x0 ) * ( frame.getMinY() - y0 ) /  ( y1 - y0 );
-                    y = frame.getMinY();
-                } else if (( outCode & LEFT ) != 0 ) {
-                    x = frame.getMaxX();
-                    y = start.getY() + ( y1 - y0 ) * ( frame.getMaxX() - x0 ) / ( x1 - x0 );
-                } else if (( outCode & RIGHT ) != 0 ) {
-                    x = frame.getMinX();
-                    y = start.getY() + ( y1 - y0 ) * ( frame.getMinX() - x0 ) / ( x1 - x0 );
-                }
-
-                // Clip another intersect point for next pass
-                if ( outCode == outCode0 ) {
-                    x0 = x;
-                    y0 = y;
-                    outCode0 = computeOutCode( x0, y0, frame );
-                } else {
-                    x1 = x;
-                    y1 = y;
-                    outCode1 = computeOutCode( x1, y1, frame );
-                }
-            }
-        }
-
-        return isCollide;
-    }
 
     public static Shape seekCollide(Mover mover, ArrayList< Shape > shapes )
     {
@@ -101,10 +29,53 @@ public class ColliderChecker {
 
         AABB player = new AABB(
                 mover.getX(),
-                mover.getY() + mover.getHeight() - 2, // sub 2 for create a frame of height 2
+                mover.getY() + mover.getHeight() - 10, // sub 2 for create a frame of height 2
                 mover.getWidth(),
-                2 );
+                10 );
+
+        cs.setClip( player );
+
+        int xSign = (mover.getDx() != 0 ) ? (int) Math.signum( mover.getDx() ) : 0;
+        int ySign = (mover.getDy() != 0 ) ? (int) Math.signum( mover.getDy() ) : 0;
+
+        for ( int i = 1; i <= mover.getSpeed(); ++i ) {
+            int dx = 1 * xSign, dy = 1 * ySign;
+            player.translate( dx, dy );
+            cs.setClip( player );
+            for ( Shape s : shapes ) {
+                if ( checkCollide( s, player)) {
+                    shape = s;
+                    break;
+                }
+            }
+            if ( shape != null ) {
+                dx = (i - 1) * xSign;
+                dy = (i - 1) * ySign;
+                mover.setVector( (i - 1) * xSign, (i - 1) * ySign );
+                break;
+            }
+        }
+
         return shape;
+    }
+
+    private static boolean checkCollide( Shape shape, AABB player ) {
+        for (int i = 0; i < shape.getNbrOfPoint(); i++) {
+            Point start, end;
+            start = shape.getPoint( i );
+            if ( i == shape.getNbrOfPoint() - 1 ) {
+                end = shape.getPoint( 0 );
+            } else {
+                end = shape.getPoint( i + 1 );
+            }
+            if ( cs.clip( start, end )) {
+                collide = new Line();
+                collide.p1 = start;
+                collide.p2 = end;
+                return true;
+            }
+        }
+        return false;
     }
 
     public static Shape isPlayerExited(Mover mover, ArrayList<DecorExit > exites )
