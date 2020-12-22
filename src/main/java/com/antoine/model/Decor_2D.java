@@ -26,6 +26,8 @@ public class Decor_2D extends Abstract_Decor
 
     @Override
     public void update() {
+        DecorExit exit = ColliderChecker.isPlayerExited( this.player, this.exit_boxes );
+
         if ( this.player.isMoving() )
         {
             this.collision = ColliderChecker.seekCollide( this.player, this.obstacle_mask );

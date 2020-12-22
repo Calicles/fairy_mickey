@@ -21,6 +21,10 @@ public class RenderedDecor {
 
     protected static double g_dim_coef;
     protected static HashMap<Direction, ArrayList<BufferedImage>> player_imgs;
+    private int player_sprite_index;
+    private int anim_slower;
+    private double dim_coef;
+    private final int ANIM_SLOWER_MAX = 6;
 
 
 
@@ -79,8 +83,17 @@ public class RenderedDecor {
     protected void drawEntities(Graphics g, RenderedEntity[] entities) {
         if ( entities != null ) {
             RenderedMotionEntity player = (RenderedMotionEntity) entities[0];
+            if ( player.isMoving() ) {
+                ++anim_slower;
+                if (( anim_slower % ANIM_SLOWER_MAX ) == 0 ) {
+                    anim_slower = 0;
+                    player_sprite_index = (++player_sprite_index) % player_imgs.size();
+                }
+            } else {
+                player_sprite_index = 0;
+            }
             g.drawImage(
-                    player_imgs.get( player.getDirection() ).get( 0 ),
+                    player_imgs.get( player.getDirection() ).get( player_sprite_index ),
                     player.getX(),
                     player.getY(),
                     player.getWidth(),

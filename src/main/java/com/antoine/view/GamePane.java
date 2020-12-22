@@ -25,10 +25,6 @@ public class GamePane extends JPanel
     private RenderedDecor rDecor;
     private RenderedEntity[] entities;
     private final String FILE_NAME = "";
-    private int player_sprite_index;
-    private int anim_slower;
-    private double dim_coef;
-    private final int ANIM_SLOWER_MAX = 4;
 
     // TODO remode
     private ArrayList< Point >[] boxes;
@@ -39,8 +35,7 @@ public class GamePane extends JPanel
     GamePane( double _dim_coef )
     {
         super( true );
-        this.dim_coef = _dim_coef;
-        RenderedDecor.setDim_Coef( this.dim_coef );
+        RenderedDecor.setDim_Coef( _dim_coef );
         this.rDecor = RenderedDecorFactory.getRenderedDecor( 1 );
         loadPlayerImages();
     }
@@ -145,7 +140,7 @@ public class GamePane extends JPanel
             for ( int j = 0; j < images.length(); j++ ) {
                 list.add(
                         ImageReader.readImage(
-                                path_prefix + images.getString( i )));
+                                path_prefix + images.getString( j )));
             }
             player_imgs.put( dir, list );
         }

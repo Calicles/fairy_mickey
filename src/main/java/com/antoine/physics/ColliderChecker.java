@@ -22,16 +22,21 @@ public class ColliderChecker {
     private static final int TOP    = 8;
 
 
+    private static AABB playerToAABB( Mover mover ) {
+        return new AABB(
+                mover.getX(),
+                mover.getY() + mover.getHeight() - 10, // sub 2 for create a frame of height 2
+                mover.getWidth(),
+                10 );
+    }
+
+
     public static Shape seekCollide(Mover mover, ArrayList< Shape > shapes )
     {
         Shape shape = null;
         // create an AABB that represent the frame in the clipping alog
 
-        AABB player = new AABB(
-                mover.getX(),
-                mover.getY() + mover.getHeight() - 10, // sub 2 for create a frame of height 2
-                mover.getWidth(),
-                10 );
+        AABB player = playerToAABB( mover );
 
         cs.setClip( player );
 
@@ -78,13 +83,15 @@ public class ColliderChecker {
         return false;
     }
 
-    public static Shape isPlayerExited(Mover mover, ArrayList<DecorExit > exites )
+    public static DecorExit isPlayerExited(Mover mover, ArrayList<DecorExit > exites )
     {
-        ArrayList< Shape > tmp = new ArrayList<>( exites.size() );
-        for ( DecorExit de : exites ) {
-            tmp.add( (Shape) de);
-        }
-        return seekCollide( mover, tmp );
+        AABB aabb = playerToAABB( mover );
+        DecorExit collide = exites
+            .stream()
+            .filter( e -> checkCollide( e, aabb ))
+            .findFirst()
+            .orElse( null );
+        return collide;
     }
 
     private static Point findNextStep( Mover mover, ArrayList< Point > line )
