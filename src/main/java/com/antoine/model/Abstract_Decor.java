@@ -20,8 +20,6 @@ public abstract class Abstract_Decor implements Decor {
     protected boolean starting = true;
     protected boolean ending   = false;
 
-    static protected DecorListener dListener;
-
     public abstract void update();
     public abstract void setEntringPlayerCoordinates();
 
@@ -37,6 +35,14 @@ public abstract class Abstract_Decor implements Decor {
     }
 
     @Override
+    public boolean isEnding() {
+        return this.ending;
+    }
+
+    @Override
+    public boolean isStarting() { return this.starting; }
+
+    @Override
     public Shape getCollision() { return null;}
 
     public static void setPlayer( Player _player )
@@ -48,6 +54,11 @@ public abstract class Abstract_Decor implements Decor {
     {
         this.last_player_dir = direction;
     }
+
+    public void setStarted() { this.starting = false; }
+
+    @Override
+    public int getNextDecorId() { return this.next_decor_id; }
 
     //TODO REMOVE
     @Override
@@ -76,16 +87,6 @@ public abstract class Abstract_Decor implements Decor {
     }
 
     public double getDistanceRatio() { return this.player_distance_ratio; }
-
-    public void addListener( DecorListener listener ) {
-        dListener = listener;
-    }
-
-    protected void fireDecorEnded()
-    {
-        DecorChangeEvent event = new DecorChangeEvent( this.next_decor_id );
-        dListener.onDecorEnded( event );
-    }
 
     public void addExit(int next_decor_id ) {
         this.exit_boxes.add( new DecorExit( next_decor_id ) );

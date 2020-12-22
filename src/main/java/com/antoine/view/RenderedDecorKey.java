@@ -23,9 +23,9 @@ public class RenderedDecorKey extends RenderedDecor {
     }
 
     @Override
-    protected void drawEntities(Graphics g, RenderedEntity[] entities )
+    protected void drawEntities(Graphics g, RenderedEntity[] entities, boolean inTransition )
     {
-        super.drawEntities( g, entities );
+        super.drawEntities( g, entities, inTransition );
         RenderedMotionEntity player = (RenderedMotionEntity) entities[0];
         if ( ! player.hasKey( key_id )) {
             // render key

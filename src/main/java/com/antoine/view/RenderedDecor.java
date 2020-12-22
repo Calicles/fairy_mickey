@@ -51,10 +51,10 @@ public class RenderedDecor {
         this.height     = (int) ( this.background_img.getHeight() * g_dim_coef );
     }
 
-    public void render( Graphics g, RenderedEntity[] entities )
+    public void render( Graphics g, RenderedEntity[] entities, boolean inTransition )
     {
         this.renderBackGround( g );
-        this.drawEntities( g, entities );
+        this.drawEntities( g, entities, inTransition );
         this.renderFront( g );
     }
 
@@ -80,10 +80,10 @@ public class RenderedDecor {
         );
     }
 
-    protected void drawEntities(Graphics g, RenderedEntity[] entities) {
+    protected void drawEntities(Graphics g, RenderedEntity[] entities, boolean inTransition) {
         if ( entities != null ) {
             RenderedMotionEntity player = (RenderedMotionEntity) entities[0];
-            if ( player.isMoving() ) {
+            if ( player.isMoving() && ! inTransition ) {
                 ++anim_slower;
                 if (( anim_slower % ANIM_SLOWER_MAX ) == 0 ) {
                     anim_slower = 0;

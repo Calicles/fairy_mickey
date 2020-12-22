@@ -30,6 +30,8 @@ public class GamePane extends JPanel
     private ArrayList< Point >[] boxes;
     private ArrayList< Point >[] solids;
     private Shape collision;
+    private int ALPHA = 0;
+    private boolean inTransition = false;
 
 
     GamePane( double _dim_coef )
@@ -56,8 +58,8 @@ public class GamePane extends JPanel
     @Override
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
-
-        this.rDecor.render( g, this.entities );
+        g = ( Graphics2D ) g;
+        this.rDecor.render( g, this.entities, inTransition );
 
         Color oldColor = g.getColor();
 
@@ -103,13 +105,17 @@ public class GamePane extends JPanel
         {
             Point p1 = ColliderChecker.collide.p1;
             Point p2 = ColliderChecker.collide.p2;
-                g.drawLine(p1.getX(), p1.getY(), p2.getX(), p2.getY());
-                RenderedEntity p = (RenderedEntity) entities[0];
-                g.drawLine( p.getX(), p.getY() + p.getHeight() - 10, p.getX() + p.getWidth(), p.getY() + p.getHeight() - 10);
+            g.drawLine(p1.getX(), p1.getY(), p2.getX(), p2.getY());
+            RenderedEntity p = (RenderedEntity) entities[0];
+            g.drawLine( p.getX(), p.getY() + p.getHeight() - 10, p.getX() + p.getWidth(), p.getY() + p.getHeight() - 10);
         }
 
         g.setColor( oldColor );
-        g.dispose();
+        if ( inTransition ) {
+            g.setColor( new Color( 0, 0, 0, ALPHA) );
+            g.fillRect(0, 0, this.getWidth(), this.getHeight());
+        }
+    g.dispose();
     }
 
     public void render( Decor decor )
@@ -119,6 +125,7 @@ public class GamePane extends JPanel
         this.boxes = decor.getExit();
         this.solids = decor.getLines();
         this.collision = decor.getCollision();
+        this.inTransition = decor.isEnding() || decor.isStarting();
         revalidate();
         this.repaint();
     }
@@ -146,5 +153,23 @@ public class GamePane extends JPanel
         }
 
         RenderedDecor.setPlayerImgs( player_imgs );
+    }
+
+    public void fadeOut() {
+        ALPHA += 2;
+        if ( ALPHA > 255 ) ALPHA = 255;
+    }
+
+    public boolean isFadeOutFinished() {
+        return ALPHA == 255;
+    }
+
+    public void fadeIn() {
+        ALPHA -= 2;
+        if ( ALPHA < 0 ) ALPHA = 0;
+    }
+
+    public boolean isFadeInFinished() {
+        return ALPHA == 0;
     }
 }

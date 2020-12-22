@@ -26,12 +26,18 @@ public class Decor_2D extends Abstract_Decor
 
     @Override
     public void update() {
-        DecorExit exit = ColliderChecker.isPlayerExited( this.player, this.exit_boxes );
-
-        if ( this.player.isMoving() )
-        {
-            this.collision = ColliderChecker.seekCollide( this.player, this.obstacle_mask );
-            this.player.translate();
+        if ( ! starting && ! ending ) {
+            DecorExit exit = ColliderChecker.isPlayerExited( this.player, this.exit_boxes );
+            if ( exit != null ) {
+                this.next_decor_id = exit.getNext_decor_id();
+                this.ending = true;
+            } else {
+                if ( this.player.isMoving() )
+                {
+                    this.collision = ColliderChecker.seekCollide( this.player, this.obstacle_mask );
+                    this.player.translate();
+                }
+            }
         }
     }
     //TODO REMOVE
@@ -84,7 +90,9 @@ public class Decor_2D extends Abstract_Decor
 
     @Override
     public void setEntringPlayerCoordinates() {
-        this.player.setDirection( this.getPlayerReentrantDir() );
-        this.player.setPosition( player_reentring_pos.get( this.last_player_dir ));
+        this.ending   = false;
+        this.starting = true;
+        player.setDirection( this.getPlayerReentrantDir() );
+        player.setPosition( player_reentring_pos.get( this.last_player_dir ));
     }
 }

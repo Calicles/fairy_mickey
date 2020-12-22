@@ -109,6 +109,26 @@ public class Frame extends JFrame implements View
         this.repaint();
     }
 
+    @Override
+    public void fadeOut() {
+        this.gamePane.fadeOut();
+    }
+
+    @Override
+    public boolean isFadeOutFinished() {
+        return this.gamePane.isFadeOutFinished();
+    }
+
+    @Override
+    public void fadeIn() {
+        this.gamePane.fadeIn();
+    }
+
+    @Override
+    public boolean isFadeInFinished() {
+        return this.gamePane.isFadeInFinished();
+    }
+
     private class InternKeyListener implements KeyListener
     {
         @Override

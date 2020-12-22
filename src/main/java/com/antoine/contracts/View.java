@@ -11,4 +11,12 @@ public interface View {
     void onPlayerGrabKey( PlayerGrabKeyEvent event );
 
     void onEndGame( Controler controler );
+
+    void fadeOut();
+
+    boolean isFadeOutFinished();
+
+    void fadeIn();
+
+    boolean isFadeInFinished();
 }

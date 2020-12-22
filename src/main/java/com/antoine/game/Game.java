@@ -7,7 +7,7 @@ import com.antoine.sound.Jukebox;
 
 import java.awt.*;
 
-public class Game implements DecorListener, Controler {
+public class Game implements Controler {
 
     private boolean running = true;
     private Player player;
@@ -37,12 +37,24 @@ public class Game implements DecorListener, Controler {
 
     private void render()
     {
+        if ( this.decor.isEnding() ) {
+            this.view.fadeOut();
+            if ( this.view.isFadeOutFinished() ) {
+                this.onDecorEnded( this.decor.getNextDecorId() );
+            }
+        }else if ( this.decor.isStarting() ) {
+            this.view.fadeIn();
+            if ( this.view.isFadeInFinished() ) {
+                this.decor.setStarted();
+            }
+        }
         this.view.render( this.decor );
     }
 
     private void sleep( long sleep )
     {
         try {
+            if ( sleep < 0 ) sleep = 0;
             Thread.sleep( sleep );
         } catch ( InterruptedException ie ) {}
     }
@@ -87,10 +99,10 @@ public class Game implements DecorListener, Controler {
         this.player.setHeight( playerHeight );
     }
 
-    @Override
-    public void onDecorEnded(DecorChangeEvent event) {
-        this.decor = DecorFactory.getDecor( event.getNextDecorId() );
-        this.view.loadDecor( event.getNextDecorId() );
+    public void onDecorEnded( int nextDecorId ) {
+        this.decor = DecorFactory.getDecor( nextDecorId );
+        this.decor.setEntringPlayerCoordinates();
+        this.view.loadDecor( nextDecorId );
     }
 
     @Override
