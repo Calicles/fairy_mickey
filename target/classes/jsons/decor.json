@@ -7,13 +7,13 @@
     "player_entrance_direction": "DOWN",
     "exits": [
       {
-        "next_decor_id": 2,
+        "next_decor_id": 3,
         "points": [
           {"x": 681,"y": 234},{"x": 700,"y": 234},{"x": 700,"y": 345}, {"x":  681, "y":  345}
         ]
       },
       {
-        "next_decor_id": 3,
+        "next_decor_id": 2,
         "points": [
           {"x": 179,"y": 380},{"x": 555,"y": 380},{"x": 555,"y": 400},{"x": 179,"y": 400}
         ]
@@ -53,7 +53,7 @@
     "type": 2,
     "distance_ratio": 1,
     "distance_ratio_speed": 1,
-    "player_entrance_direction": "BOTTOM",
+    "player_entrance_direction": "UP",
     "exits": [
       {
         "next_decor_id": 1,
@@ -86,7 +86,7 @@
       ]
     ],
     "entrance_player_direction_coordinates": [
-      {"name": "DOWN", "position": {"x": 185,"y": 260}},
+      {"name": "UP", "position": {"x": 185,"y": 260}},
       {"name": "RIGHT", "position": {"x": 32,"y": 321}},
       {"name": "LEFT", "position": {"x": 660,"y": 321}}
     ]
