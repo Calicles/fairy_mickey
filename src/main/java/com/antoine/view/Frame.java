@@ -6,6 +6,7 @@ import com.antoine.contracts.Direction;
 import com.antoine.contracts.View;
 import com.antoine.events.PlayerGrabKeyEvent;
 import com.antoine.helpers.JsonHelper;
+import com.antoine.sound.SoundEffect;
 import org.json.JSONObject;
 
 import javax.swing.*;
@@ -21,6 +22,7 @@ public class Frame extends JFrame implements View
     private Controler       controler;
     private double          dim_coef;
     private InternKeyListener keyListener;
+    private SoundEffect     click_sound = new SoundEffect( "/musics/zemeckis_sound_higher.wav", 1f, this::onSoundend );
 
     public Frame( Controler controler )
     {
@@ -54,16 +56,11 @@ public class Frame extends JFrame implements View
         this.controler.addView( this );
     }
 
-    public void onNewGame()
-    {
-        Container container = this.getContentPane();
-
-        container.remove( this.menuPane );
-        container.getLayout().removeLayoutComponent( this.menuPane );
-
+    public void onSoundend() {
         this.gamePane       = new GamePane( this.dim_coef );
         this.inventoryPane  = new InventoryPane();
 
+        Container container = this.getContentPane();
         container.add( this.gamePane, BorderLayout.CENTER );
         //container.add( this.inventoryPane );
 
@@ -75,6 +72,17 @@ public class Frame extends JFrame implements View
         this.requestFocusInWindow();
         this.revalidate();
         this.repaint();
+    }
+
+    public void onNewGame()
+    {
+        this.getContentPane().setBackground( Color.BLACK );
+        Container container = this.getContentPane();
+        container.remove( this.menuPane );
+        container.getLayout().removeLayoutComponent( this.menuPane );
+        this.repaint();
+
+        this.click_sound.play();
     }
 
     @Override

@@ -86,4 +86,12 @@ public class Player extends Entity implements Mover, RenderedMotionEntity {
             case RIGHT: dx = speed; dy = 0;
         }
     }
+
+    public String toString()
+    {
+        StringBuilder builder = new StringBuilder();
+        builder.append( this.coordinates.toString() );
+        builder.append("\n");
+        return builder.toString();
+    }
 }

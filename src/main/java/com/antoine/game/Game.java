@@ -61,6 +61,7 @@ public class Game implements Controler {
 
     void run()
     {
+        this.jukebox = new Jukebox();
         this.decor = DecorFactory.getDecor( 1 );
         this.decor.setEntringPlayerCoordinates();
 

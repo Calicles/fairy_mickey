@@ -23,7 +23,8 @@ public class Decor_1D extends Abstract_Decor
         // TODO remove
         this.player.translate();
         if ( player.isMoving() ) {
-            ColliderChecker.adaptVectorToLine( player, line_mask );
+            System.out.println(player);
+            //ColliderChecker.adaptVectorToLine( player, line_mask );
         }
     }
 
@@ -48,13 +49,12 @@ public class Decor_1D extends Abstract_Decor
         if ( this.player_come_odd_times )
         {
             this.player.setPosition( this.entring_odd_Player_pos );
-            this.player.setDirection( this.getPlayerReentrantDir() );
         }
         else
         {
             this.player.setPosition( this.entring_even_Player_pos );
-            this.player.setDirection( this.getPlayerReentrantDir() );
         }
+        this.player.setDirection( this.getPlayerReentrantDir() );
         this.player_come_odd_times = ! this.player_come_odd_times;
     }
 }
