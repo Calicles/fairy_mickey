@@ -7,7 +7,7 @@ import com.antoine.contracts.RenderedMotionEntity;
 
 public class Player extends Entity implements Mover, RenderedMotionEntity {
 
-    private final int speed;
+    private int speed;
     private int dx;
     private int dy;
     private Direction current_direction;
@@ -26,7 +26,10 @@ public class Player extends Entity implements Mover, RenderedMotionEntity {
     public void setPosition( int x, int y ) { this.coordinates.setPosition( x, y ); }
     public void setPosition( Point p ) { this.coordinates.setPosition( p );}
     public Direction getDirection() { return this.current_direction; }
-
+    public void adaptSpeed( double coef )
+    {
+        this.speed = (int) Math.round( this.speed * coef );
+    }
     @Override
     public int getDx() {
         return dx;

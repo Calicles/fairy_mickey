@@ -95,6 +95,7 @@ public class GamePane extends JPanel
                     x2 = solids[i].get( j+1).getX();
                     y2 = solids[i].get(j+1).getY();
                 }
+                System.out.println(x2 + " ; " + y2);
                 g.drawLine( solids[i].get(j).getX(), solids[i].get(j).getY(), x2, y2);
             }
         }

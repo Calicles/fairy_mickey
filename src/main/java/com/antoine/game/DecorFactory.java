@@ -123,6 +123,7 @@ public class DecorFactory {
 
     public static void setPlayer( Player player )
     {
+        player.adaptSpeed( dim_coef );
         Abstract_Decor.setPlayer( player );
     }
 }

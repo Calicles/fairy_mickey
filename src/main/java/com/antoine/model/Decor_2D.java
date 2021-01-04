@@ -95,4 +95,9 @@ public class Decor_2D extends Abstract_Decor
         player.setDirection( this.getPlayerReentrantDir() );
         player.setPosition( player_reentring_pos.get( this.last_player_dir ));
     }
+
+    @Override
+    public void setPlayerDirection(Direction direction) {
+        player.Move( direction );
+    }
 }

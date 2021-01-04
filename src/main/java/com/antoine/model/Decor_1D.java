@@ -1,5 +1,6 @@
 package com.antoine.model;
 
+import com.antoine.contracts.Direction;
 import com.antoine.physics.ColliderChecker;
 import java.util.ArrayList;
 
@@ -18,12 +19,20 @@ public class Decor_1D extends Abstract_Decor
         line_mask = new ArrayList<>(5);
     }
 
+    // TODO REMOVE
+    @Override
+    public ArrayList< Point >[] getLines()
+    {
+        ArrayList< Point >[] line = new ArrayList[ 1 ];
+        line[0] = new ArrayList<>( this.line_mask );
+        return line;
+    }
+
     @Override
     public void update() {
         // TODO remove
         this.player.translate();
         if ( player.isMoving() ) {
-            System.out.println(player);
             //ColliderChecker.adaptVectorToLine( player, line_mask );
         }
     }
@@ -56,5 +65,10 @@ public class Decor_1D extends Abstract_Decor
         }
         this.player.setDirection( this.getPlayerReentrantDir() );
         this.player_come_odd_times = ! this.player_come_odd_times;
+    }
+
+    @Override
+    public void setPlayerDirection(Direction direction) {
+        player.Move( direction );
     }
 }
