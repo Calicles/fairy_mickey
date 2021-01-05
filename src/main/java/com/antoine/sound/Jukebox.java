@@ -8,20 +8,29 @@ public class Jukebox {
     private String[]    musics_str;
     private String      music_path;
     private MusicPlayer current_music = null;
-    private int         music_index = 0;
+    private int         music_index;
 
     public Jukebox() {
         this.init();
+    }
+    
+    public void start()
+    {
+        this.music_index = 0;
         this.loadNextMusic();
-        this.current_music.play();
     }
 
-    void incrMusicIndex()
+    public void stop()
+    {
+        this.current_music.arret();
+    }
+
+    private void incrMusicIndex()
     {
         this.music_index = ++this.music_index % this.musics_str.length;
     }
 
-    void loadNextMusic() {
+    private void loadNextMusic() {
         this.current_music = new MusicPlayer(
             this.music_path + musics_str[ this.music_index ],
             1f,
@@ -31,7 +40,7 @@ public class Jukebox {
         this.current_music.play();
     }
 
-    void init()
+    private void init()
     {
         String json_file_path = "/jsons/musics.json";
         JSONObject json = JsonHelper.strToJson( json_file_path );

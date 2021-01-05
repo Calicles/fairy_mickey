@@ -6,6 +6,7 @@ import com.antoine.contracts.Direction;
 import com.antoine.contracts.View;
 import com.antoine.events.PlayerGrabKeyEvent;
 import com.antoine.helpers.JsonHelper;
+import com.antoine.sound.Jukebox;
 import com.antoine.sound.SoundEffect;
 import org.json.JSONObject;
 
@@ -16,18 +17,23 @@ import java.awt.event.KeyListener;
 
 public class Frame extends JFrame implements View
 {
+    private Jukebox jukebox;
+    private Controler       controler;
+    private SoundEffect     click_sound = new SoundEffect( "/musics/zemeckis_sound_higher.wav", 1f, this::onSoundend );
+
     private GamePane        gamePane;
     private InventoryPane   inventoryPane;
-    private final MenuPane  menuPane;
-    private Controler       controler;
-    private double          dim_coef;
+
     private InternKeyListener keyListener;
-    private SoundEffect     click_sound = new SoundEffect( "/musics/zemeckis_sound_higher.wav", 1f, this::onSoundend );
+
+    private final MenuPane  menuPane;
+    private double          dim_coef;
 
     public Frame( Controler controler )
     {
         super("Fairy_Mickey" );
 
+        this.jukebox = new Jukebox();
         this.keyListener = new InternKeyListener();
 
         JSONObject conf = JsonHelper.strToJson( "/jsons/conf.json");
@@ -57,6 +63,8 @@ public class Frame extends JFrame implements View
     }
 
     public void onSoundend() {
+        this.jukebox.start();
+
         this.gamePane       = new GamePane( this.dim_coef );
         this.inventoryPane  = new InventoryPane();
 

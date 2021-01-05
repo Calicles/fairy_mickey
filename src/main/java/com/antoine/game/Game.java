@@ -1,9 +1,7 @@
 package com.antoine.game;
 
 import com.antoine.contracts.*;
-import com.antoine.events.DecorChangeEvent;
 import com.antoine.model.Player;
-import com.antoine.sound.Jukebox;
 
 import java.awt.*;
 
@@ -12,7 +10,6 @@ public class Game implements Controler {
     private boolean running = true;
     private Player player;
     private Decor decor;
-    private Jukebox jukebox;
     private View view;
     private Thread gameLoopThread;
 
@@ -62,7 +59,6 @@ public class Game implements Controler {
 
     void run()
     {
-        this.jukebox = new Jukebox();
         this.decor = DecorFactory.getDecor( 1 );
         this.decor.setEntringPlayerCoordinates();
 
