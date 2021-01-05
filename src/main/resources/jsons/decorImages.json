@@ -1,11 +1,16 @@
 {
-  "1": {
-    "path": "three_way/final/1/",
-    "bg": "automn_way.jpg",
-    "fg": "front.png"
+  "1":{
+    "path": "side_way/final/1/",
+    "bg": "cabin.jpg",
+    "fg": "null"
   },
   "2": {
     "path": "three_way/final/2/",
+    "bg": "automn_way.jpg",
+    "fg": "front.png"
+  },
+  "3": {
+    "path": "three_way/final/3/",
     "bg": "pseudo_three_way_forest.jpg",
     "fg": "front.png"
   }

@@ -10,9 +10,13 @@ import java.io.IOException;
  */
 public class MusicPlayer extends SoundMaker {
 
+    public interface Command {
+        void execute();
+    }
+
     /**Etat pour savoir si la musique est entrain d'être utilisée ou si en pause*/
     boolean playing;
-
+    private Command music_end_cb;
 
     /**
      * <p>Initialise le Thread et les états</p>
@@ -20,11 +24,11 @@ public class MusicPlayer extends SoundMaker {
      * @param musicPath le path du fichier .wav
      * @param volume
      */
-    public MusicPlayer(String musicPath, float volume) {
+    public MusicPlayer( String musicPath, float volume, Command music_end_cb ) {
         super(musicPath, volume);
-
         playing=true;
         using= true;
+        this.music_end_cb = music_end_cb;
     }
 
     /**
@@ -59,6 +63,7 @@ public class MusicPlayer extends SoundMaker {
                     bytes = adjustVolume(bytes);
                     line.write(bytes, 0, totalRead);
                 }
+                if ( this.music_end_cb != null )    this.music_end_cb.execute();
             } catch (IOException ioe) {
                 ioe.printStackTrace();
             }

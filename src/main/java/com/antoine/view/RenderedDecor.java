@@ -46,7 +46,7 @@ public class RenderedDecor {
     public void loadImgs( String bg_img_name, String f_img_name )
     {
         background_img  = ImageReader.readImage( bg_img_name );
-        front_img       = ImageReader.readImage( f_img_name );
+        if ( ! f_img_name.contains( "null" ) ) front_img       = ImageReader.readImage( f_img_name );
         this.width      = (int) ( this.background_img.getWidth() * g_dim_coef );
         this.height     = (int) ( this.background_img.getHeight() * g_dim_coef );
     }
@@ -65,7 +65,9 @@ public class RenderedDecor {
 
     protected void renderFront(Graphics g)
     {
-        this.drawDecorImg( g, this.front_img );
+        if ( this.front_img != null ) {
+            this.drawDecorImg( g, this.front_img );
+        }
     }
 
     protected void drawDecorImg( Graphics g, BufferedImage img )
