@@ -3,8 +3,6 @@ package com.antoine.game;
 import com.antoine.contracts.*;
 import com.antoine.model.Player;
 
-import java.awt.*;
-
 public class Game implements Controler {
 
     private boolean running = true;
