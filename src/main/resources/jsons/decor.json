@@ -2,20 +2,26 @@
   "1":
   {
     "type": 1,
+    "is_vertical": false,
     "distance_ratio": 1,
     "distance_ratio_speed": 1,
     "player_entrance_direction": "RIGHT",
-    "exits": [
-
-    ],
     "line_mask": [
       {"x": 516,"y": 540},
       {"x": 0,"y": 540}
     ],
-    "odd_x": 536,
-    "odd_y": 320,
-    "even_x": 536,
-    "even_y": 320
+    "exits": [
+      {
+        "next_decor_id": 3,
+        "points": [
+          {"x": 0,"y": 308},{"x": 20,"y": 308},{"x": 20,"y": 399},{"x": 0,"y": 399}
+        ]
+      }
+    ],
+    "entrance_player_direction_coordinates": [
+      {"name": "RIGHT", "position": {"x": 536,"y": 320}},
+      {"name": "LEFT", "position": {"x": 100,"y": 320}}
+    ]
 },
 "2":
   {
@@ -25,7 +31,7 @@
     "player_entrance_direction": "DOWN",
     "exits": [
       {
-        "next_decor_id": 4,
+        "next_decor_id": 1,
         "points": [
           {"x": 681,"y": 234},{"x": 700,"y": 234},{"x": 700,"y": 380}, {"x":  681, "y":  380}
         ]
@@ -71,10 +77,10 @@
     "type": 2,
     "distance_ratio": 1,
     "distance_ratio_speed": 1,
-    "player_entrance_direction": "UP",
+    "player_entrance_direction": "RIGHT",
     "exits": [
       {
-        "next_decor_id": 1,
+        "next_decor_id": 2,
         "points": [
           {"x": 154,"y": 225},{"x": 271,"y": 225},{"x": 271,"y": 240},{"x": 154,"y": 240}
         ]
@@ -86,7 +92,7 @@
         ]
       },
       {
-        "next_decor_id": 6,
+        "next_decor_id": 1,
         "points": [
           {"x": 675,"y": 268},{"x": 700,"y": 268},{"x": 700,"y": 400},{"x": 675,"y": 400}
         ]
@@ -105,8 +111,8 @@
     ],
     "entrance_player_direction_coordinates": [
       {"name": "UP", "position": {"x": 185,"y": 260}},
-      {"name": "RIGHT", "position": {"x": 32,"y": 321}},
-      {"name": "LEFT", "position": {"x": 660,"y": 321}}
+      {"name": "LEFT", "position": {"x": 32,"y": 321}},
+      {"name": "RIGHT", "position": {"x": 630,"y": 300}}
     ]
   }
 }

@@ -77,6 +77,7 @@ public class ColliderChecker {
     public static DecorExit isPlayerExited(Mover mover, ArrayList<DecorExit > exites )
     {
         AABB aabb = playerToAABB( mover );
+        cs.setClip( aabb );
         DecorExit collide = exites
             .stream()
             .filter( e -> checkCollide( e, aabb ))

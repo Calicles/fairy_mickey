@@ -6,10 +6,10 @@ import com.antoine.model.Player;
 public class Game implements Controler {
 
     private boolean running = true;
-    private Player player;
-    private Decor decor;
-    private View view;
-    private Thread gameLoopThread;
+    private final   Player player;
+    private Decor   decor;
+    private View    view;
+    private Thread  gameLoopThread;
 
     public Game()
     {

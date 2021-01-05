@@ -62,7 +62,7 @@ public class GamePane extends JPanel
         this.rDecor.render( g, this.entities, inTransition );
 
         Color oldColor = g.getColor();
-
+        /*
         g.setColor( Color.BLACK );
 
         for ( int i = 0; boxes != null && i < boxes.length; i++ )
@@ -82,20 +82,27 @@ public class GamePane extends JPanel
             }
         }
         g.setColor( Color.CYAN );
-        for ( int i = 0; solids != null && i < solids.length; i++ )
+        if ( solids!= null )
         {
-            for ( int j = 0; j < solids[i].size(); j++ )
+            for ( int i = 0; i < solids.length; i++ )
             {
-                int x2, y2;
-                if ( j == solids[i].size() - 1 ){
-                    x2 = solids[i].get(0).getX();
-                    y2 = solids[i].get(0).getY();
-                } else
+                for ( int j = 0; j < solids[i].size(); j++ )
                 {
-                    x2 = solids[i].get( j+1).getX();
-                    y2 = solids[i].get(j+1).getY();
+                    if ( solids[i].size() == 2 ) {
+                        g.drawLine( solids[i].get(0).getX(), solids[i].get(0).getY(), solids[i].get(1).getX(), solids[i].get(1).getY());
+                    } else {
+                        int x2, y2;
+                        if ( j == solids[i].size() - 1 ){
+                            x2 = solids[i].get(0).getX();
+                            y2 = solids[i].get(0).getY();
+                        } else
+                        {
+                            x2 = solids[i].get( j+1).getX();
+                            y2 = solids[i].get(j+1).getY();
+                        }
+                        g.drawLine( solids[i].get(j).getX(), solids[i].get(j).getY(), x2, y2);
+                    }
                 }
-                g.drawLine( solids[i].get(j).getX(), solids[i].get(j).getY(), x2, y2);
             }
         }
 
@@ -109,12 +116,14 @@ public class GamePane extends JPanel
             RenderedEntity p = (RenderedEntity) entities[0];
             g.drawLine( p.getX(), p.getY() + p.getHeight() - 10, p.getX() + p.getWidth(), p.getY() + p.getHeight() - 10);
         }
+        */
 
-        g.setColor( oldColor );
+
         if ( inTransition ) {
             g.setColor( new Color( 0, 0, 0, ALPHA) );
             g.fillRect(0, 0, this.getWidth(), this.getHeight());
         }
+        g.setColor( oldColor );
     g.dispose();
     }
 

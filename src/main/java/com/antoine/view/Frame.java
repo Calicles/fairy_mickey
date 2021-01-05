@@ -19,7 +19,7 @@ public class Frame extends JFrame implements View
 {
     private Jukebox jukebox;
     private Controler       controler;
-    private SoundEffect     click_sound = new SoundEffect( "/musics/zemeckis_sound_higher.wav", 1f, this::onSoundend );
+    private SoundEffect     click_sound = new SoundEffect( "/musics/zemeckis_sound_higher.wav", .5f, this::onSoundend );
 
     private GamePane        gamePane;
     private InventoryPane   inventoryPane;

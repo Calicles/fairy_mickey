@@ -39,20 +39,31 @@ public class DecorFactory {
                 decor.addPointToCurrentExit( (int) ( p.getInt( "x" ) * dim_coef ), (int) ( p.getInt( "y" ) * dim_coef ));
             }
         }
+
+        // add entrance player position by player direction
+        JSONArray entrances = decor_json.getJSONArray( "entrance_player_direction_coordinates" );
+        for (int i = 0; i < entrances.length(); i++) {
+            JSONObject entry = entrances.getJSONObject( i );
+            JSONObject point_json = entry.getJSONObject( "position" );
+            decor.addPlayerEntrance(
+                    entry.getString( "name" ),
+                    (int) ( point_json.getInt( "x" ) * dim_coef ),
+                    (int) ( point_json.getInt( "y" ) * dim_coef ));
+        }
     }
 
     static Decor_1D createDecor1D(JSONObject decor_json, int id)
     {
         Decor_1D decor = new Decor_1D( id );
         build( decor, decor_json );
-        decor.setEntringPlayerPos( (int) ( decor_json.getInt( "odd_x" ) * dim_coef ), (int) ( decor_json.getInt( "odd_y" ) * dim_coef ));
-        decor.setComeBackPlayerPos( (int) ( decor_json.getInt( "even_x" ) * dim_coef ), (int) ( decor_json.getInt( "even_y" ) * dim_coef ));
         JSONArray lineMask = decor_json.getJSONArray( "line_mask" );
         for ( int i = 0; i < lineMask.length(); ++i )
         {
             JSONObject point = lineMask.getJSONObject( i );
             decor.addPointToMask( (int) ( point.getInt( "x" ) * dim_coef ), (int) ( point.getInt( "y" ) * dim_coef ));
         }
+
+        decor.setIs_vertical( decor_json.getBoolean( "is_vertical" ));
         return decor;
     }
 
@@ -72,16 +83,6 @@ public class DecorFactory {
                         (int) (point.getInt( "y" ) * dim_coef )
                 );
             }
-        }
-        // add entrance player position by player direction
-        JSONArray entrances = decor_json.getJSONArray( "entrance_player_direction_coordinates" );
-        for (int i = 0; i < entrances.length(); i++) {
-            JSONObject entry = entrances.getJSONObject( i );
-            JSONObject point_json = entry.getJSONObject( "position" );
-            decor.addPlayerEntrance(
-                    entry.getString( "name" ),
-                    (int) ( point_json.getInt( "x" ) * dim_coef ),
-                    (int) ( point_json.getInt( "y" ) * dim_coef ));
         }
         return decor;
     }

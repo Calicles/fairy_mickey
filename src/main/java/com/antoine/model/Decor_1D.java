@@ -8,10 +8,7 @@ public class Decor_1D extends Abstract_Decor
 {
     protected ArrayList< Point > line_mask;
 
-    protected Point entring_odd_Player_pos;
-    protected Point entring_even_Player_pos;
-
-    protected boolean player_come_odd_times = true;
+    protected boolean is_vertical;
 
     public Decor_1D( int _id )
     {
@@ -30,21 +27,25 @@ public class Decor_1D extends Abstract_Decor
 
     @Override
     public void update() {
-        // TODO remove
-        this.player.translate();
-        if ( player.isMoving() ) {
-            //ColliderChecker.adaptVectorToLine( player, line_mask );
+        if ( ! starting && ! ending ) {
+            DecorExit exit = ColliderChecker.isPlayerExited( this.player, this.exit_boxes );
+            if ( exit != null ) {
+                this.next_decor_id = exit.getNext_decor_id();
+                this.ending = true;
+                super.last_player_dir = player.getDirection();
+            } else {
+                if ( this.player.isMoving() )
+                {
+                    this.player.translate();
+                }
+            }
         }
     }
 
-    public void setEntringPlayerPos( int _x, int _y )
+    public void setIs_vertical( boolean is_vertical )
     {
-        entring_odd_Player_pos = new Point( _x, _y );
-    }
-
-    public void setComeBackPlayerPos( int _x, int _y )
-    {
-        entring_even_Player_pos = new Point( _x, _y );
+        System.out.println("is vertical: " + is_vertical);
+        this.is_vertical = is_vertical;
     }
 
     public void addPointToMask( int x, int y )
@@ -55,20 +56,18 @@ public class Decor_1D extends Abstract_Decor
     @Override
     public void setEntringPlayerCoordinates()
     {
-        if ( this.player_come_odd_times )
-        {
-            this.player.setPosition( this.entring_odd_Player_pos );
-        }
-        else
-        {
-            this.player.setPosition( this.entring_even_Player_pos );
-        }
-        this.player.setDirection( this.getPlayerReentrantDir() );
-        this.player_come_odd_times = ! this.player_come_odd_times;
+        super.setEntringPlayerCoordinates();
     }
 
     @Override
     public void setPlayerDirection(Direction direction) {
-        player.Move( direction );
+        if ( isValidDirection( direction ))
+        {
+            player.Move( direction );
+        }
+    }
+
+    private boolean isValidDirection(Direction direction) {
+        return this.is_vertical ? ( direction == Direction.UP || direction == Direction.BOTTOM ) : ( direction == Direction.LEFT || direction == Direction.RIGHT );
     }
 }
