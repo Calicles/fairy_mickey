@@ -1,9 +1,7 @@
 package com.antoine.game;
 
 import com.antoine.contracts.*;
-import com.antoine.events.DecorChangeEvent;
 import com.antoine.model.Player;
-import com.antoine.sound.Jukebox;
 
 import java.awt.*;
 
@@ -12,18 +10,18 @@ public class Game implements Controler {
     private boolean running = true;
     private Player player;
     private Decor decor;
-    private Jukebox jukebox;
     private View view;
     private Thread gameLoopThread;
 
     public Game()
     {
-        this.player = new Player( 0, 0, 4 );
+        this.player = new Player( 0, 0, 1 );
         this.player.setDirection( Direction.UP );
         DecorFactory.setPlayer( this.player );
 
         gameLoopThread = new Thread( this::run );
     }
+
     public Game( Game game ) {
         this.player = game.player;
     }
@@ -117,7 +115,7 @@ public class Game implements Controler {
 
     @Override
     public void recordMove(Direction direction) {
-        player.Move( direction );
+        this.decor.setPlayerDirection( direction );
     }
 
     @Override

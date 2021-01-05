@@ -23,6 +23,8 @@ public abstract class Abstract_Decor implements Decor {
     public abstract void update();
     public abstract void setEntringPlayerCoordinates();
 
+    public abstract void setPlayerDirection( Direction direction );
+
     protected Abstract_Decor( int _id )
     {
         this.id = _id;

@@ -65,7 +65,7 @@ public class GamePane extends JPanel
 
         g.setColor( Color.BLACK );
 
-        for ( int i = 0; i < boxes.length; i++ )
+        for ( int i = 0; boxes != null && i < boxes.length; i++ )
         {
             for ( int j = 0; j < boxes[i].size(); j++ )
             {
@@ -82,7 +82,7 @@ public class GamePane extends JPanel
             }
         }
         g.setColor( Color.CYAN );
-        for ( int i = 0; i < solids.length; i++ )
+        for ( int i = 0; solids != null && i < solids.length; i++ )
         {
             for ( int j = 0; j < solids[i].size(); j++ )
             {

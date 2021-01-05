@@ -8,6 +8,12 @@ import java.io.ByteArrayOutputStream;
  */
 public class SoundEffect extends SoundMaker {
 
+    public interface Command {
+        void execute();
+    }
+
+    private Command sound_end_cb;
+
     /**Contient les octets du flux après copie*/
     private byte[] samples;
 
@@ -16,9 +22,10 @@ public class SoundEffect extends SoundMaker {
      * @param musicPath le path du fichier.
      * @param volume le volume à appliquer.
      */
-    public SoundEffect(String musicPath, float volume) {
+    public SoundEffect(String musicPath, float volume, Command sound_end_cb ) {
         super(musicPath, volume);
         samples = getAudioFileData();
+        this.sound_end_cb = sound_end_cb;
     }
 
     /**
@@ -37,6 +44,7 @@ public class SoundEffect extends SoundMaker {
                     bytesRead += buf.length;
                     line.write(buf, 0, buf.length);
                 }
+                if ( this.sound_end_cb != null )    this.sound_end_cb.execute();
                 sleep();
             }
         });

@@ -25,4 +25,6 @@ public interface Decor {
     void setStarted();
 
     boolean isStarting();
+
+    void setPlayerDirection( Direction direction );
 }

@@ -45,13 +45,13 @@ public class DecorFactory {
     {
         Decor_1D decor = new Decor_1D( id );
         build( decor, decor_json );
-        decor.setEntringPlayerPos( decor_json.getInt( "odd_x" ), decor_json.getInt( "odd_y" ));
-        decor.setComeBackPlayerPos( decor_json.getInt( "even_x" ), decor_json.getInt( "even_y" ));
+        decor.setEntringPlayerPos( (int) ( decor_json.getInt( "odd_x" ) * dim_coef ), (int) ( decor_json.getInt( "odd_y" ) * dim_coef ));
+        decor.setComeBackPlayerPos( (int) ( decor_json.getInt( "even_x" ) * dim_coef ), (int) ( decor_json.getInt( "even_y" ) * dim_coef ));
         JSONArray lineMask = decor_json.getJSONArray( "line_mask" );
         for ( int i = 0; i < lineMask.length(); ++i )
         {
             JSONObject point = lineMask.getJSONObject( i );
-            decor.addPointToMask( point.getInt( "x" ), point.getInt( "y" ));
+            decor.addPointToMask( (int) ( point.getInt( "x" ) * dim_coef ), (int) ( point.getInt( "y" ) * dim_coef ));
         }
         return decor;
     }
@@ -123,6 +123,7 @@ public class DecorFactory {
 
     public static void setPlayer( Player player )
     {
+        player.adaptSpeed( dim_coef );
         Abstract_Decor.setPlayer( player );
     }
 }
