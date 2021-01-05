@@ -7,6 +7,10 @@ import com.antoine.model.Point;
 import com.antoine.model.Shape;
 
 import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.function.Function;
+import java.util.function.Predicate;
+import java.util.stream.Stream;
 
 public class ColliderChecker {
 
@@ -88,10 +92,60 @@ public class ColliderChecker {
 
     private static Point findNextStep( Mover mover, ArrayList< Point > line )
     {
-        Point closerPoint = line.get( 0 );
-        return closerPoint;
+        Direction dir = mover.getDirection();
+        Stream< Point > sorted_n_filtered;
+        if ( dir == Direction.UP )
+        {
+            sorted_n_filtered = line
+                    .stream()
+                    .sorted( (p1, p2) -> Integer.compare( p2.getY(), p1.getY() ))
+                    .filter( p -> p.getY() < mover.getY() );
+
+        }
+        else if ( dir == Direction.BOTTOM  ) {
+            sorted_n_filtered = line
+                    .stream()
+                    .sorted( Comparator.comparingInt( Point::getY ))
+                    .filter( p -> ( mover.getY() + mover.getHeight() ) < p.getY());
+        }
+        else if ( dir == Direction.RIGHT )
+        {
+            sorted_n_filtered = line
+                    .stream()
+                    .sorted( Comparator.comparingInt( Point::getX ))
+                    .filter( p -> ( mover.getX() + mover.getWidth() ) < p.getX() );
+        }
+        else {
+            sorted_n_filtered = line
+                    .stream()
+                    .sorted( (p1, p2) -> Integer.compare( p2.getX(), p1.getX() ) )
+                    .filter( p -> p.getX() < mover.getX() );
+        }
+
+        return sorted_n_filtered.findFirst().orElse( null );
     }
     public static void adaptVectorToLine( Mover mover, ArrayList<Point> line ) {
-
+        Point nextPoint = findNextStep( mover, line );
+        if ( nextPoint == null ) {
+            mover.setVector( 0, 0 );
+        }
+        else {
+            Point middle    = new Point(mover.getX() + ( mover.getX() + mover.getWidth() / 2 ), mover.getY() + mover.getHeight() );
+            Direction dir = mover.getDirection();
+            if ( dir == Direction.UP || dir == Direction.BOTTOM ) {
+                if ( middle.getX() < nextPoint.getX() ) {
+                    mover.setVector( mover.getSpeed(), mover.getDy());
+                } else if ( middle.getX() > nextPoint.getX() ) {
+                    mover.setVector( - mover.getSpeed(), mover.getDy());
+                }
+            } else
+            {
+                if ( middle.getY() < nextPoint.getY() ) {
+                    mover.setVector(mover.getDx(), mover.getSpeed() );
+                } else if ( middle.getY() > nextPoint.getY() ) {
+                    mover.setVector(mover.getDx(), - mover.getSpeed() );
+                }
+            }
+        }
     }
 }

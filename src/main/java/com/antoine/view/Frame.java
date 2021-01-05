@@ -17,9 +17,9 @@ import java.awt.event.KeyListener;
 
 public class Frame extends JFrame implements View
 {
-    private Jukebox jukebox;
+    private Jukebox         jukebox;
     private Controler       controler;
-    private SoundEffect     click_sound = new SoundEffect( "/musics/zemeckis_sound_higher.wav", .5f, this::onSoundend );
+    private SoundEffect     click_sound = new SoundEffect( "/musics/zemeckis_sound_higher.wav", 1f, this::onSoundend );
 
     private GamePane        gamePane;
     private InventoryPane   inventoryPane;
@@ -33,11 +33,11 @@ public class Frame extends JFrame implements View
     {
         super("Fairy_Mickey" );
 
-        this.jukebox = new Jukebox();
-        this.keyListener = new InternKeyListener();
+        this.jukebox        = new Jukebox();
+        this.keyListener    = new InternKeyListener();
 
         JSONObject conf = JsonHelper.strToJson( "/jsons/conf.json");
-        this.dim_coef = conf.getDouble( "dim_coef" );
+        this.dim_coef   = conf.getDouble( "dim_coef" );
 
         this.initControler( controler );
 
@@ -67,8 +67,8 @@ public class Frame extends JFrame implements View
 
         this.gamePane       = new GamePane( this.dim_coef );
         this.inventoryPane  = new InventoryPane();
-
         Container container = this.getContentPane();
+
         container.add( this.gamePane, BorderLayout.CENTER );
         //container.add( this.inventoryPane );
 
@@ -111,7 +111,7 @@ public class Frame extends JFrame implements View
 
     @Override
     public void onEndGame( Controler controler ) {
-
+        this.jukebox.stop();
         this.removeKeyListener( this.keyListener );
         this.initControler( controler );
         Container container = this.getContentPane();

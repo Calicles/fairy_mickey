@@ -7,8 +7,8 @@
     "distance_ratio_speed": 1,
     "player_entrance_direction": "RIGHT",
     "line_mask": [
-      {"x": 516,"y": 540},
-      {"x": 0,"y": 540}
+      {"x": 516,"y": 360},
+      {"x": 0,"y": 360}
     ],
     "exits": [
       {

@@ -21,7 +21,7 @@ public class Decor_1D extends Abstract_Decor
     public ArrayList< Point >[] getLines()
     {
         ArrayList< Point >[] line = new ArrayList[ 1 ];
-        line[0] = new ArrayList<>( this.line_mask );
+        line[0] = this.line_mask;
         return line;
     }
 
@@ -36,6 +36,7 @@ public class Decor_1D extends Abstract_Decor
             } else {
                 if ( this.player.isMoving() )
                 {
+                    ColliderChecker.adaptVectorToLine( player, line_mask );
                     this.player.translate();
                 }
             }
@@ -44,7 +45,6 @@ public class Decor_1D extends Abstract_Decor
 
     public void setIs_vertical( boolean is_vertical )
     {
-        System.out.println("is vertical: " + is_vertical);
         this.is_vertical = is_vertical;
     }
 
