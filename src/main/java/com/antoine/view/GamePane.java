@@ -63,7 +63,7 @@ public class GamePane extends JPanel
         this.rDecor.render( g, this.entities, inTransition );
 
         Color oldColor = g.getColor();
-        /*
+
         g.setColor( Color.BLACK );
 
         for ( int i = 0; boxes != null && i < boxes.length; i++ )
@@ -106,6 +106,12 @@ public class GamePane extends JPanel
             }
         }
 
+        g.setColor( Color.green );
+        if ( ColliderChecker.nexttep != null ) {
+            g.drawOval(ColliderChecker.playerMiddle.getX() - 10, ColliderChecker.playerMiddle.getY() - 10, 20, 20 );
+            g.drawOval( ColliderChecker.nexttep.getX() - 40, ColliderChecker.nexttep.getY() - 40, 80, 80 );
+        }
+
         g.setColor( Color.MAGENTA );
 
         if ( ColliderChecker.collide != null )
@@ -118,7 +124,7 @@ public class GamePane extends JPanel
         }
 
 
-        */
+
         if ( inTransition ) {
             g.setColor( new Color( 0, 0, 0, ALPHA) );
             g.fillRect(0, 0, this.getWidth(), this.getHeight());

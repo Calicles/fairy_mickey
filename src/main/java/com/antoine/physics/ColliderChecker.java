@@ -8,13 +8,13 @@ import com.antoine.model.Shape;
 
 import java.util.ArrayList;
 import java.util.Comparator;
-import java.util.function.Function;
-import java.util.function.Predicate;
 import java.util.stream.Stream;
 
 public class ColliderChecker {
 
     public static Line collide;
+    public static Point nexttep;
+    public static Point playerMiddle;
     public static CohenSutherland cs = new CohenSutherland();
 
     private static AABB playerToAABB( Mover mover ) {
@@ -126,11 +126,13 @@ public class ColliderChecker {
     }
     public static void adaptVectorToLine( Mover mover, ArrayList<Point> line ) {
         Point nextPoint = findNextStep( mover, line );
+        nexttep = nextPoint;
         if ( nextPoint == null ) {
             mover.setVector( 0, 0 );
         }
         else {
-            Point middle    = new Point(mover.getX() + ( mover.getX() + mover.getWidth() / 2 ), mover.getY() + mover.getHeight() );
+            Point middle    = new Point(mover.getX() + mover.getWidth() / 2 , mover.getY() + mover.getHeight() );
+            playerMiddle = middle;
             Direction dir = mover.getDirection();
             if ( dir == Direction.UP || dir == Direction.BOTTOM ) {
                 if ( middle.getX() < nextPoint.getX() ) {
