@@ -90,50 +90,50 @@ public class ColliderChecker {
         return collide;
     }
 
-    private static Point findNextStep( Mover mover, ArrayList< Point > line )
+    private static Point findNextStep( Point player_middle, ArrayList< Point > line, Direction dir )
     {
-        Direction dir = mover.getDirection();
         Stream< Point > sorted_n_filtered;
         if ( dir == Direction.UP )
         {
             sorted_n_filtered = line
                     .stream()
                     .sorted( (p1, p2) -> Integer.compare( p2.getY(), p1.getY() ))
-                    .filter( p -> p.getY() < mover.getY() );
+                    .filter( p -> p.getY() < player_middle.getY() );
 
         }
         else if ( dir == Direction.BOTTOM  ) {
             sorted_n_filtered = line
                     .stream()
                     .sorted( Comparator.comparingInt( Point::getY ))
-                    .filter( p -> ( mover.getY() + mover.getHeight() ) < p.getY());
+                    .filter( p -> player_middle.getY() < p.getY());
         }
         else if ( dir == Direction.RIGHT )
         {
             sorted_n_filtered = line
                     .stream()
                     .sorted( Comparator.comparingInt( Point::getX ))
-                    .filter( p -> ( mover.getX() + mover.getWidth() ) < p.getX() );
+                    .filter( p -> player_middle.getX() < p.getX() );
         }
         else {
             sorted_n_filtered = line
                     .stream()
                     .sorted( (p1, p2) -> Integer.compare( p2.getX(), p1.getX() ) )
-                    .filter( p -> p.getX() < mover.getX() );
+                    .filter( p -> p.getX() < player_middle.getX() );
         }
 
         return sorted_n_filtered.findFirst().orElse( null );
     }
     public static void adaptVectorToLine( Mover mover, ArrayList<Point> line ) {
-        Point nextPoint = findNextStep( mover, line );
-        nexttep = nextPoint;
+        Direction dir   = mover.getDirection();
+        Point middle    = new Point(mover.getX() + mover.getWidth() / 2 , mover.getY() + mover.getHeight() );
+        Point nextPoint = findNextStep( middle, line, dir );
+        nexttep         = nextPoint;
+
         if ( nextPoint == null ) {
             mover.setVector( 0, 0 );
         }
         else {
-            Point middle    = new Point(mover.getX() + mover.getWidth() / 2 , mover.getY() + mover.getHeight() );
             playerMiddle = middle;
-            Direction dir = mover.getDirection();
             if ( dir == Direction.UP || dir == Direction.BOTTOM ) {
                 if ( middle.getX() < nextPoint.getX() ) {
                     mover.setVector( mover.getSpeed(), mover.getDy());

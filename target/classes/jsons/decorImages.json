@@ -13,5 +13,10 @@
     "path": "three_way/final/3/",
     "bg": "pseudo_three_way_forest.jpg",
     "fg": "front.png"
+  },
+  "4": {
+    "path": "up_way/final/20/",
+    "bg": "lantern.png",
+    "fg": "null"
   }
 }

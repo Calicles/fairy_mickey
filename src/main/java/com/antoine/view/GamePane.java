@@ -123,8 +123,6 @@ public class GamePane extends JPanel
             g.drawLine( p.getX(), p.getY() + p.getHeight() - 10, p.getX() + p.getWidth(), p.getY() + p.getHeight() - 10);
         }
 
-
-
         if ( inTransition ) {
             g.setColor( new Color( 0, 0, 0, ALPHA) );
             g.fillRect(0, 0, this.getWidth(), this.getHeight());
