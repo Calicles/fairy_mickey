@@ -52,10 +52,8 @@ public class DecorFactory {
         }
     }
 
-    static Decor_1D createDecor1D(JSONObject decor_json, int id)
-    {
-        Decor_1D decor = new Decor_1D( id );
-        build( decor, decor_json );
+
+    static void build1D( Decor_1D decor, JSONObject decor_json) {
         JSONArray lineMask = decor_json.getJSONArray( "line_mask" );
         for ( int i = 0; i < lineMask.length(); ++i )
         {
@@ -64,6 +62,13 @@ public class DecorFactory {
         }
 
         decor.setIs_vertical( decor_json.getBoolean( "is_vertical" ));
+    }
+
+    static Decor_1D createDecor1D(JSONObject decor_json, int id)
+    {
+        Decor_1D decor = new Decor_1D( id );
+        build( decor, decor_json );
+        build1D( decor, decor_json );
         return decor;
     }
 
@@ -90,7 +95,12 @@ public class DecorFactory {
     static Decor_with_key createDecorWithKey(JSONObject decor_json, int id)
     {
         Decor_with_key decor = new Decor_with_key( id );
-        build( decor,  decor_json );
+        build( decor, decor_json );
+        build1D( decor, decor_json );
+
+        JSONObject key = decor_json.getJSONObject( "key" );
+        decor.setKeyCoordinates( (int) (key.getInt( "x") * dim_coef), (int) (key.getInt( "y" ) * dim_coef));
+        decor.setKeyDimension( (int) (key.getInt( "width" ) * dim_coef), (int) (key.getInt( "height" ) * dim_coef ));
         return decor;
     }
 

@@ -23,8 +23,8 @@ public class RenderedDecor {
     protected static HashMap<Direction, ArrayList<BufferedImage>> player_imgs;
     private int player_sprite_index;
     private int anim_slower;
-    private double dim_coef;
-    private final int ANIM_SLOWER_MAX = 6;
+    protected double dim_coef;
+    protected final int ANIM_SLOWER_MAX = 6;
 
 
 

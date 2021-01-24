@@ -13,6 +13,14 @@ public class Decor_with_key extends Decor_1D
         super( _id );
     }
 
+    public void setKeyCoordinates( int x, int y ) {
+        this.key = new Entity( x, y );
+    }
+
+    public void setKeyDimension( int width, int height ) {
+        this.key.setSize( width, height );
+    }
+
     @Override
     public RenderedEntity[] getEntities()
     {
@@ -25,6 +33,6 @@ public class Decor_with_key extends Decor_1D
     @Override
     public void update()
     {
-
+        super.update();
     }
 }

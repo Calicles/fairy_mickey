@@ -1,6 +1,7 @@
 package com.antoine.view;
 
 import com.antoine.helpers.JsonHelper;
+import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.io.BufferedReader;
@@ -26,7 +27,23 @@ public class RenderedDecorFactory {
     {
         JSONObject decor_json = json.getJSONObject( Integer.toString( id ));
         String path = IMG_PATH + decor_json.getString( "path" );
-        RenderedDecor decor = new RenderedDecor( id );
+        RenderedDecor decor = null;
+        if ( ! decor_json.has( "key" )) {
+            decor = new RenderedDecor( id );
+        } else {
+            RenderedDecorKey decorKey = new RenderedDecorKey( id );
+            JSONObject key = decor_json.getJSONObject( "key" );
+            String keyPath = key.getString( "path");
+            JSONArray keyAnim = key.getJSONArray( "animation" );
+            StringBuilder builder = new StringBuilder();
+            builder.append( keyPath );
+            for ( Object obj : keyAnim ) {
+                builder.append( obj );
+                decorKey.loadKeyImg( builder.toString() );
+                builder.delete( keyPath.length(), builder.length() );
+            }
+            decor = decorKey;
+        }
         decor.loadImgs( path + decor_json.getString( "bg" ), path + decor_json.getString( "fg" ));
         return decor;
     }

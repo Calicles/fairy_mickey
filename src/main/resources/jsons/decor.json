@@ -144,5 +144,28 @@
       {"name": "UP", "position": {"x": 270,"y": 290}},
       {"name": "DOWN", "position": {"x": 350,"y": 380}}
     ]
+  },
+  "5":
+  {
+    "type": 3,
+    "is_vertical": false,
+    "distance_ratio": 1,
+    "distance_ratio_speed": 1,
+    "player_entrance_direction": "LEFT",
+    "exits": [
+      {
+        "next_decor_id": 2,
+        "points": [
+          {"x": 0,"y": 271},{"x": 10,"y": 271},{"x": 10,"y": 399},{"x": 0,"y": 399}
+        ]
+      }
+    ],
+    "line_mask": [
+      {"x": 0,"y": 358},{"x": 407,"y": 358}
+    ],
+    "entrance_player_direction_coordinates": [
+      {"name": "LEFT","position": {"x": 53,"y": 318}}
+    ],
+    "key": {"x": 337,"y": 250,"width": 158,"height": 148}
   }
 }
