@@ -1,16 +1,23 @@
 package com.antoine.model;
 
+import com.antoine.contracts.Decor_key;
 import com.antoine.contracts.RenderedEntity;
 import com.antoine.contracts.View;
 
-public class Decor_with_key extends Decor_1D
+public class Decor_with_key extends Decor_1D implements Decor_key
 {
-    Entity key;
+    private Entity key;
+    private int key_id;
 
 
     public Decor_with_key( int _id )
     {
         super( _id );
+    }
+
+    public void setKeyId( int key_id )
+    {
+        this.key_id = key_id;
     }
 
     public void setKeyCoordinates( int x, int y ) {

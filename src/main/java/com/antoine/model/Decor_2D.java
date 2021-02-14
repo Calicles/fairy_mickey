@@ -11,7 +11,7 @@ import java.util.HashMap;
 public class Decor_2D extends Abstract_Decor
 {
     private ArrayList< Shape > obstacle_mask;
-    private Shape collision;
+    protected Shape collision;
 
     public Decor_2D( int _id )
     {
@@ -34,11 +34,16 @@ public class Decor_2D extends Abstract_Decor
                 if ( this.player.isMoving() )
                 {
                     this.collision = ColliderChecker.seekCollide( this.player, this.obstacle_mask );
+                    checkOtherCollides();
                     this.player.translate();
                 }
             }
         }
     }
+
+    protected void checkOtherCollides() {
+    }
+
     //TODO REMOVE
     @Override
     public ArrayList< Point >[] getLines()

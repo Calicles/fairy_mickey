@@ -1,6 +1,7 @@
 package com.antoine.game;
 
 import com.antoine.contracts.Decor;
+import com.antoine.contracts.Decor_key;
 import com.antoine.contracts.Direction;
 import com.antoine.helpers.Direction_helper;
 import com.antoine.helpers.JsonHelper;
@@ -64,6 +65,30 @@ public class DecorFactory {
         decor.setIs_vertical( decor_json.getBoolean( "is_vertical" ));
     }
 
+    static void build2D( Decor_2D decor, JSONObject decor_json )
+    {
+        JSONArray solids = decor_json.getJSONArray( "solids" );
+        for (int i = 0; i < solids.length(); i++) {
+            decor.createShape();
+            JSONArray solids_points =  solids.getJSONArray( i );
+            for (int j = 0; j < solids_points.length(); j++) {
+                JSONObject point = solids_points.getJSONObject( j );
+                decor.addPointToCurrentShape(
+                        (int) ( point.getInt( "x" ) * dim_coef ),
+                        (int) (point.getInt( "y" ) * dim_coef )
+                );
+            }
+        }
+    }
+
+    static void buildWithKey(Decor_key decor, JSONObject decor_json )
+    {
+        JSONObject key = decor_json.getJSONObject( "key" );
+        decor.setKeyCoordinates( (int) (key.getInt( "x") * dim_coef), (int) (key.getInt( "y" ) * dim_coef));
+        decor.setKeyDimension( (int) (key.getInt( "width" ) * dim_coef), (int) (key.getInt( "height" ) * dim_coef ));
+    }
+
+
     static Decor_1D createDecor1D(JSONObject decor_json, int id)
     {
         Decor_1D decor = new Decor_1D( id );
@@ -77,18 +102,7 @@ public class DecorFactory {
         Decor_2D decor = new Decor_2D( id );
         build( decor, decor_json );
         // add all solids presents in map
-        JSONArray solids = decor_json.getJSONArray( "solids" );
-        for (int i = 0; i < solids.length(); i++) {
-            decor.createShape();
-            JSONArray solids_points =  solids.getJSONArray( i );
-            for (int j = 0; j < solids_points.length(); j++) {
-                JSONObject point = solids_points.getJSONObject( j );
-                decor.addPointToCurrentShape(
-                        (int) ( point.getInt( "x" ) * dim_coef ),
-                        (int) (point.getInt( "y" ) * dim_coef )
-                );
-            }
-        }
+        build2D( decor, decor_json );
         return decor;
     }
 
@@ -97,10 +111,17 @@ public class DecorFactory {
         Decor_with_key decor = new Decor_with_key( id );
         build( decor, decor_json );
         build1D( decor, decor_json );
+        buildWithKey( decor, decor_json );
 
-        JSONObject key = decor_json.getJSONObject( "key" );
-        decor.setKeyCoordinates( (int) (key.getInt( "x") * dim_coef), (int) (key.getInt( "y" ) * dim_coef));
-        decor.setKeyDimension( (int) (key.getInt( "width" ) * dim_coef), (int) (key.getInt( "height" ) * dim_coef ));
+        return decor;
+    }
+
+
+    private static Decor createDecorWithKey2D(JSONObject decor_json, int id) {
+        Decor_with_key_2d decor = new Decor_with_key_2d( id );
+        build       ( decor, decor_json );
+        build2D     ( decor, decor_json );
+        buildWithKey( decor, decor_json );
         return decor;
     }
 
@@ -124,12 +145,15 @@ public class DecorFactory {
             case 3:
                 decor = createDecorWithKey( decor_json, id );
                 break;
+            case 4:
+                decor = createDecorWithKey2D( decor_json, id );
         }
         container.put( id, decor );
         decor.setPlayerLastDirection(
                 Direction_helper.strToDir( decor_json.getString( "player_entrance_direction" )));
         return decor;
     }
+
 
 
     public static void setPlayer( Player player )

@@ -124,13 +124,13 @@
     "player_entrance_direction": "DOWN",
     "exits": [
       {
-        "next_decor_id": 2,
+        "next_decor_id": 6,
         "points": [
           {"x": 0,"y": 230},{"x": 699,"y": 230},{"x": 699,"y": 250},{"x": 0,"y": 250}
         ]
       },
       {
-        "next_decor_id": 3,
+        "next_decor_id": 2,
         "points": [
           {"x": 0,"y": 385},{"x": 699,"y": 385},{"x": 699,"y": 399},{"x": 0,"y": 399}
         ]
@@ -167,5 +167,64 @@
       {"name": "LEFT","position": {"x": 53,"y": 318}}
     ],
     "key": {"x": 337,"y": 250,"width": 158,"height": 148}
+  },
+  "6":
+  {
+    "type": 1,
+    "is_vertical": true,
+    "distance_ratio": 1,
+    "distance_ratio_speed": 1,
+    "player_entrance_direction": "DOWN",
+    "exits":[
+      {
+        "next_decor_id": 4,
+        "points": [
+          {"x": 0,"y": 390},{"x": 699,"y": 390},{"x": 699,"y": 399},{"x": 0,"y": 399}
+        ]
+      },
+      {
+        "next_decor_id": 7,
+        "points": [
+          {"x": 0,"y": 320},{"x": 699,"y": 320},{"x": 699,"y": 330},{"x": 0,"y": 330}
+        ]
+      }
+    ],
+    "line_mask": [
+      {"x": 240,"y": 300},{"x": 240,"y": 343},{"x": 217,"y":359},{"x": 203,"y":366},{"x": 223,"y": 380},{"x": 230,"y": 399}
+    ],
+    "entrance_player_direction_coordinates": [
+      {"name": "DOWN", "position": {"x": 212,"y": 380}},{"name": "UP","position":{"x": 227,"y": 345}}
+    ]
+  },
+  "7":
+  {
+    "type": 4,
+    "distance_ratio": 1,
+    "distance_ratio_speed": 1,
+    "player_entrance_direction": "UP",
+    "exits": [
+      {
+        "next_decor_id": 6,
+        "points": [
+          {"x": 0,"y":230},{"x": 699,"y": 230},{"x": 699,"y": 240},{"x": 0,"y": 240}
+        ]
+      }
+    ],
+    "solids": [
+      [
+        {"x": 445,"y": 250},{"x": 290,"y":250},{"x": 286,"y": 267},
+        {"x": 258,"y": 276},{"x": 186,"y": 277},{"x": 125,"y": 318},
+        {"x": 99,"y": 232},{"x": 45,"y": 399},{"x": 0,"y": 399},{"x": 0,"y": 0},{"x": 445,"y": 0}
+      ],
+      [
+        {"x": 391,"y": 398},{"x": 321,"y": 340},{"x": 346,"y": 323},{"x": 401,"y": 303},
+        {"x": 480,"y": 297},{"x": 585,"y": 302},{"x": 521,"y": 258},{"x": 521,"y": 0},
+        {"x": 699,"y": 0},{"x": 699,"y": 399}
+      ]
+    ],
+    "entrance_player_direction_coordinates": [
+      {"name": "UP","position": {"x": 452,"y": 255}}
+    ],
+    "key": {"x": 127,"y": 309,"width":120,"height": 93}
   }
 }
