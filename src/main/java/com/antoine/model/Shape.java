@@ -17,6 +17,11 @@ public class Shape {
         return points.add( p );
     }
 
+    public boolean addPoint( int x, int y )
+    {
+        return points.add( new Point( x, y ));
+    }
+
     public ArrayList< Point > getPoints() { return this.points; }
 
     public int getNbrOfPoint() { return points.size(); }

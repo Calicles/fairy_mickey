@@ -24,13 +24,14 @@ public class GamePane extends JPanel
 {
     private RenderedDecor rDecor;
     private RenderedEntity[] entities;
-    private final String FILE_NAME = "";
 
     // TODO remode
     private ArrayList< Point >[] boxes;
     private ArrayList< Point >[] solids;
     private Shape collision;
-    private int ALPHA = 0;
+    private int         ALPHA = 0;
+    private final int   ALPHA_MAX = 255;
+    private final int   ALPHA_STEP = 2;
     private boolean inTransition = false;
 
 
@@ -53,16 +54,16 @@ public class GamePane extends JPanel
 
     /**
      * @see JPanel#paintComponent(Graphics)
-     * @param g graphics chargé de l'affichage.
+     * @param g1 graphics chargé de l'affichage.
      */
     @Override
-    public void paintComponent(Graphics g) {
-        super.paintComponent(g);
-        g = ( Graphics2D ) g;
+    public void paintComponent(Graphics g1) {
+        super.paintComponent(g1);
+        Graphics2D g = ( Graphics2D ) g1;
         this.rDecor.render( g, this.entities, inTransition );
 
         Color oldColor = g.getColor();
-        /*
+
         g.setColor( Color.BLACK );
 
         for ( int i = 0; boxes != null && i < boxes.length; i++ )
@@ -86,24 +87,29 @@ public class GamePane extends JPanel
         {
             for ( int i = 0; i < solids.length; i++ )
             {
-                for ( int j = 0; j < solids[i].size(); j++ )
-                {
-                    if ( solids[i].size() == 2 ) {
-                        g.drawLine( solids[i].get(0).getX(), solids[i].get(0).getY(), solids[i].get(1).getX(), solids[i].get(1).getY());
-                    } else {
+                if ( solids[i].size() == 2 ) {
+                    g.drawLine( solids[i].get(0).getX(), solids[i].get(0).getY(), solids[i].get(1).getX(), solids[i].get(1).getY());
+                } else {
+                    for (int j = 0; j < solids[i].size(); j++) {
                         int x2, y2;
-                        if ( j == solids[i].size() - 1 ){
+                        if (j == solids[i].size() - 1) {
                             x2 = solids[i].get(0).getX();
                             y2 = solids[i].get(0).getY();
-                        } else
-                        {
-                            x2 = solids[i].get( j+1).getX();
-                            y2 = solids[i].get(j+1).getY();
+                        } else {
+                            x2 = solids[i].get(j + 1).getX();
+                            y2 = solids[i].get(j + 1).getY();
                         }
-                        g.drawLine( solids[i].get(j).getX(), solids[i].get(j).getY(), x2, y2);
+                        g.drawLine(solids[i].get(j).getX(), solids[i].get(j).getY(), x2, y2);
                     }
                 }
+
             }
+        }
+
+        g.setColor( Color.green );
+        if ( ColliderChecker.nexttep != null ) {
+            g.drawOval(ColliderChecker.playerMiddle.getX() - 10, ColliderChecker.playerMiddle.getY() - 10, 20, 20 );
+            g.drawOval( ColliderChecker.nexttep.getX() - 40, ColliderChecker.nexttep.getY() - 40, 80, 80 );
         }
 
         g.setColor( Color.MAGENTA );
@@ -116,8 +122,6 @@ public class GamePane extends JPanel
             RenderedEntity p = (RenderedEntity) entities[0];
             g.drawLine( p.getX(), p.getY() + p.getHeight() - 10, p.getX() + p.getWidth(), p.getY() + p.getHeight() - 10);
         }
-        */
-
 
         if ( inTransition ) {
             g.setColor( new Color( 0, 0, 0, ALPHA) );
@@ -165,16 +169,16 @@ public class GamePane extends JPanel
     }
 
     public void fadeOut() {
-        ALPHA += 2;
-        if ( ALPHA > 255 ) ALPHA = 255;
+        ALPHA += ALPHA_STEP;
+        if ( ALPHA > 255 ) ALPHA = ALPHA_MAX;
     }
 
     public boolean isFadeOutFinished() {
-        return ALPHA == 255;
+        return ALPHA == ALPHA_MAX;
     }
 
     public void fadeIn() {
-        ALPHA -= 2;
+        ALPHA -= ALPHA_STEP;
         if ( ALPHA < 0 ) ALPHA = 0;
     }
 

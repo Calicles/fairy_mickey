@@ -1,6 +1,7 @@
 package com.antoine.game;
 
 import com.antoine.contracts.Decor;
+import com.antoine.contracts.Decor_key;
 import com.antoine.contracts.Direction;
 import com.antoine.helpers.Direction_helper;
 import com.antoine.helpers.JsonHelper;
@@ -52,10 +53,8 @@ public class DecorFactory {
         }
     }
 
-    static Decor_1D createDecor1D(JSONObject decor_json, int id)
-    {
-        Decor_1D decor = new Decor_1D( id );
-        build( decor, decor_json );
+
+    static void build1D( Decor_1D decor, JSONObject decor_json) {
         JSONArray lineMask = decor_json.getJSONArray( "line_mask" );
         for ( int i = 0; i < lineMask.length(); ++i )
         {
@@ -64,14 +63,10 @@ public class DecorFactory {
         }
 
         decor.setIs_vertical( decor_json.getBoolean( "is_vertical" ));
-        return decor;
     }
 
-    static Decor_2D createDecor2D(JSONObject decor_json, int id)
+    static void build2D( Decor_2D decor, JSONObject decor_json )
     {
-        Decor_2D decor = new Decor_2D( id );
-        build( decor, decor_json );
-        // add all solids presents in map
         JSONArray solids = decor_json.getJSONArray( "solids" );
         for (int i = 0; i < solids.length(); i++) {
             decor.createShape();
@@ -84,13 +79,49 @@ public class DecorFactory {
                 );
             }
         }
+    }
+
+    static void buildWithKey(Decor_key decor, JSONObject decor_json )
+    {
+        JSONObject key = decor_json.getJSONObject( "key" );
+        decor.setKeyCoordinates( (int) (key.getInt( "x") * dim_coef), (int) (key.getInt( "y" ) * dim_coef));
+        decor.setKeyDimension( (int) (key.getInt( "width" ) * dim_coef), (int) (key.getInt( "height" ) * dim_coef ));
+    }
+
+
+    static Decor_1D createDecor1D(JSONObject decor_json, int id)
+    {
+        Decor_1D decor = new Decor_1D( id );
+        build( decor, decor_json );
+        build1D( decor, decor_json );
+        return decor;
+    }
+
+    static Decor_2D createDecor2D(JSONObject decor_json, int id)
+    {
+        Decor_2D decor = new Decor_2D( id );
+        build( decor, decor_json );
+        // add all solids presents in map
+        build2D( decor, decor_json );
         return decor;
     }
 
     static Decor_with_key createDecorWithKey(JSONObject decor_json, int id)
     {
         Decor_with_key decor = new Decor_with_key( id );
-        build( decor,  decor_json );
+        build( decor, decor_json );
+        build1D( decor, decor_json );
+        buildWithKey( decor, decor_json );
+
+        return decor;
+    }
+
+
+    private static Decor createDecorWithKey2D(JSONObject decor_json, int id) {
+        Decor_with_key_2d decor = new Decor_with_key_2d( id );
+        build       ( decor, decor_json );
+        build2D     ( decor, decor_json );
+        buildWithKey( decor, decor_json );
         return decor;
     }
 
@@ -114,12 +145,15 @@ public class DecorFactory {
             case 3:
                 decor = createDecorWithKey( decor_json, id );
                 break;
+            case 4:
+                decor = createDecorWithKey2D( decor_json, id );
         }
         container.put( id, decor );
         decor.setPlayerLastDirection(
                 Direction_helper.strToDir( decor_json.getString( "player_entrance_direction" )));
         return decor;
     }
+
 
 
     public static void setPlayer( Player player )

@@ -7,10 +7,14 @@ import com.antoine.model.Point;
 import com.antoine.model.Shape;
 
 import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.stream.Stream;
 
 public class ColliderChecker {
 
     public static Line collide;
+    public static Point nexttep;
+    public static Point playerMiddle;
     public static CohenSutherland cs = new CohenSutherland();
 
     private static AABB playerToAABB( Mover mover ) {
@@ -86,12 +90,64 @@ public class ColliderChecker {
         return collide;
     }
 
-    private static Point findNextStep( Mover mover, ArrayList< Point > line )
+    private static Point findNextStep( Point player_middle, ArrayList< Point > line, Direction dir )
     {
-        Point closerPoint = line.get( 0 );
-        return closerPoint;
+        Stream< Point > sorted_n_filtered;
+        if ( dir == Direction.UP )
+        {
+            sorted_n_filtered = line
+                    .stream()
+                    .sorted( (p1, p2) -> Integer.compare( p2.getY(), p1.getY() ))
+                    .filter( p -> p.getY() < player_middle.getY() );
+
+        }
+        else if ( dir == Direction.BOTTOM  ) {
+            sorted_n_filtered = line
+                    .stream()
+                    .sorted( Comparator.comparingInt( Point::getY ))
+                    .filter( p -> player_middle.getY() < p.getY());
+        }
+        else if ( dir == Direction.RIGHT )
+        {
+            sorted_n_filtered = line
+                    .stream()
+                    .sorted( Comparator.comparingInt( Point::getX ))
+                    .filter( p -> player_middle.getX() < p.getX() );
+        }
+        else {
+            sorted_n_filtered = line
+                    .stream()
+                    .sorted( (p1, p2) -> Integer.compare( p2.getX(), p1.getX() ) )
+                    .filter( p -> p.getX() < player_middle.getX() );
+        }
+
+        return sorted_n_filtered.findFirst().orElse( null );
     }
     public static void adaptVectorToLine( Mover mover, ArrayList<Point> line ) {
+        Direction dir   = mover.getDirection();
+        Point middle    = new Point(mover.getX() + mover.getWidth() / 2 , mover.getY() + mover.getHeight() );
+        Point nextPoint = findNextStep( middle, line, dir );
+        nexttep         = nextPoint;
 
+        if ( nextPoint == null ) {
+            mover.setVector( 0, 0 );
+        }
+        else {
+            playerMiddle = middle;
+            if ( dir == Direction.UP || dir == Direction.BOTTOM ) {
+                if ( middle.getX() < nextPoint.getX() ) {
+                    mover.setVector( mover.getSpeed(), mover.getDy());
+                } else if ( middle.getX() > nextPoint.getX() ) {
+                    mover.setVector( - mover.getSpeed(), mover.getDy());
+                }
+            } else
+            {
+                if ( middle.getY() < nextPoint.getY() ) {
+                    mover.setVector(mover.getDx(), mover.getSpeed() );
+                } else if ( middle.getY() > nextPoint.getY() ) {
+                    mover.setVector(mover.getDx(), - mover.getSpeed() );
+                }
+            }
+        }
     }
 }

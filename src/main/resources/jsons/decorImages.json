@@ -13,5 +13,34 @@
     "path": "three_way/final/3/",
     "bg": "pseudo_three_way_forest.jpg",
     "fg": "front.png"
+  },
+  "4": {
+    "path": "up_way/final/20/",
+    "bg": "lantern.png",
+    "fg": "null"
+  },
+  "5": {
+    "path": "side_way/final/5/",
+    "bg": "right_end.png",
+    "fg": "null",
+    "key": {
+      "path": "/images/objects/keys/silver/",
+      "animation": ["1.png","2.png","3.png","4.png"]
+    }
+  },
+  "6": {
+    "path": "up_way/final/6/",
+    "bg": "up_way_to_house_in_forest.jpg",
+    "fg": "null"
+  },
+  "7":
+  {
+    "path": "up_way/final/7/",
+    "bg": "up_houseInside_salon_poele.jpg",
+    "fg": "fg.png",
+    "key": {
+      "path": "/images/objects/keys/bronze/",
+      "animation": ["1.png","2.png","3.png","4.png","5.png"]
+    }
   }
 }
