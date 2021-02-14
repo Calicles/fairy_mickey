@@ -18,5 +18,14 @@
     "path": "up_way/final/20/",
     "bg": "lantern.png",
     "fg": "null"
+  },
+  "5": {
+    "path": "side_way/final/5/",
+    "bg": "right_end.png",
+    "fg": "null",
+    "key": {
+      "path": "/images/objects/keys/silver/",
+      "animation": ["1.png","2.png","3.png","4.png"]
+    }
   }
 }
