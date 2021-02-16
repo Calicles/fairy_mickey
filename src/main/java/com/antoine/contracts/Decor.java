@@ -1,5 +1,6 @@
 package com.antoine.contracts;
 
+import com.antoine.game.Game;
 import com.antoine.model.Point;
 import com.antoine.model.Shape;
 
@@ -27,4 +28,5 @@ public interface Decor {
     boolean isStarting();
 
     void setPlayerDirection( Direction direction );
+
 }

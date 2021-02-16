@@ -37,11 +37,15 @@ public class Decor_1D extends Abstract_Decor
                 if ( this.player.isMoving() )
                 {
                     ColliderChecker.adaptVectorToLine( player, line_mask );
+                    checkOtherCollides();
                     this.player.translate();
                 }
             }
         }
     }
+
+    protected void checkOtherCollides()
+    {}
 
     public void setIs_vertical( boolean is_vertical )
     {

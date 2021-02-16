@@ -84,6 +84,7 @@ public class DecorFactory {
     static void buildWithKey(Decor_key decor, JSONObject decor_json )
     {
         JSONObject key = decor_json.getJSONObject( "key" );
+        decor.setKeyId( decor_json.getInt( "key_id" ));
         decor.setKeyCoordinates( (int) (key.getInt( "x") * dim_coef), (int) (key.getInt( "y" ) * dim_coef));
         decor.setKeyDimension( (int) (key.getInt( "width" ) * dim_coef), (int) (key.getInt( "height" ) * dim_coef ));
     }

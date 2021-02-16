@@ -2,6 +2,7 @@ package com.antoine.model;
 
 import com.antoine.contracts.Decor_key;
 import com.antoine.contracts.RenderedEntity;
+import com.antoine.physics.AABB;
 import com.antoine.physics.ColliderChecker;
 
 import java.util.ArrayList;
@@ -35,18 +36,13 @@ public class Decor_with_key_2d extends Decor_2D implements Decor_key
     protected void checkOtherCollides()
     {
         if ( key != null )
-        {
-            ArrayList< Shape > tmp = new ArrayList<>();
-            Shape s = new Shape();
-            tmp.add( s );
-            s.addPoint( key.getX(), key.getY() );
-            if ( ColliderChecker.seekCollide( player, tmp ) != null )
-            {
-                System.out.println("collides with key");
-
-                key = null;
+        {// Key had been found
+            AABB aabb = new AABB( key.getX(), key.getY(), key.getWidth(), key.getHeight() );
+            if ( ColliderChecker.hasKey( player, aabb ))
+            {// player collides with key
+                kListener.onKeyFound( key_id );
+                this.key = null;
             }
         }
     }
-
 }

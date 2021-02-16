@@ -46,7 +46,6 @@ public class RenderedDecorKey extends RenderedDecor {
                         anim_loop_forward = true;
                     }
                 }
-                System.out.println(key_sprite_index);
             }
            g.drawImage( key.get(key_sprite_index), entities[1].getX(), entities[1].getY(), entities[1].getWidth(), entities[1].getHeight(), null );
         }

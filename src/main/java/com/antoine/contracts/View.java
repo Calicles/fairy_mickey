@@ -19,4 +19,6 @@ public interface View {
     void fadeIn();
 
     boolean isFadeInFinished();
+
+    void onKeyFound(int key_id);
 }

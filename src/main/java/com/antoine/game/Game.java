@@ -1,9 +1,10 @@
 package com.antoine.game;
 
 import com.antoine.contracts.*;
+import com.antoine.model.Abstract_Decor;
 import com.antoine.model.Player;
 
-public class Game implements Controler {
+public class Game implements Controler, KeyFoundListener {
 
     private boolean running = true;
     private final   Player player;
@@ -59,6 +60,7 @@ public class Game implements Controler {
     {
         this.decor = DecorFactory.getDecor( 1 );
         this.decor.setEntringPlayerCoordinates();
+        Abstract_Decor.setKeyFoundListener( this );
 
         // Time gestioner
         final long FPS_TARGET = 60;
@@ -119,5 +121,10 @@ public class Game implements Controler {
     @Override
     public void stopMotion() {
         player.resetDelta();
+    }
+
+    @Override
+    public void onKeyFound(int key_id) {
+        this.view.onKeyFound( key_id );
     }
 }

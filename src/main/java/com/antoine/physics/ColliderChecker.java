@@ -2,9 +2,7 @@ package com.antoine.physics;
 
 import com.antoine.contracts.Direction;
 import com.antoine.contracts.Mover;
-import com.antoine.model.DecorExit;
-import com.antoine.model.Point;
-import com.antoine.model.Shape;
+import com.antoine.model.*;
 
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -149,5 +147,17 @@ public class ColliderChecker {
                 }
             }
         }
+    }
+
+    public static boolean hasKey(Mover player, AABB key) {
+        int dx1 = ( player.getWidth() / 2 + player.getX() ) - key.getMaxX();
+        int dy1 = ( player.getHeight() / 2 + player.getY() ) - key.getMaxY();
+        int dx2 = key.getMinX() - (player.getX() + player.getWidth() / 2);
+        int dy2 = key.getMinY() - (player.getY() + player.getHeight() / 2);
+
+        if ( dx1 > 0 || dy1 > 0 ) return false;
+        if ( dx2 > 0 || dy2 > 0 ) return false;
+
+        return true;
     }
 }

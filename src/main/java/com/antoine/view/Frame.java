@@ -15,6 +15,7 @@ import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
+
 public class Frame extends JFrame implements View
 {
     private Jukebox         jukebox;
@@ -24,37 +25,64 @@ public class Frame extends JFrame implements View
     private GamePane        gamePane;
     private InventoryPane   inventoryPane;
 
-    private InternKeyListener keyListener;
-
     private final MenuPane  menuPane;
     private double          dim_coef;
+    private Dimension       game_pane_dim;
+    private boolean         in_game = false;
 
     public Frame( Controler controler )
     {
         super("Fairy_Mickey" );
 
         this.jukebox        = new Jukebox();
-        this.keyListener    = new InternKeyListener();
 
         JSONObject conf = JsonHelper.strToJson( "/jsons/conf.json");
         this.dim_coef   = conf.getDouble( "dim_coef" );
-
+        Dimension screen_size = Toolkit.getDefaultToolkit().getScreenSize();
+        System.out.println( "Dimension: width: " + screen_size.width + "  ; height: " + screen_size.height );
+        //this.dim_coef   = adaptCoefToScreenSize( screen_size );
+        int width = (int) ( conf.getInt( "width" ) * this.dim_coef );
+        int height = (int) ( conf.getInt( "height" ) * this.dim_coef );
+        this.game_pane_dim = new Dimension( width, height );
+        int xDelta = (screen_size.width - width) / 2;
+        int yDelta = (screen_size.height - height) / 2;
         this.initControler( controler );
 
         Container container = this.getContentPane();
 
         container.setLayout( new BorderLayout() );
 
-        this.menuPane = new MenuPane(
-                this::onNewGame, (int) ( conf.getInt( "width" ) * dim_coef ),
-                (int) ( conf.getInt( "height" ) * dim_coef ) );
+        this.menuPane = new MenuPane( this::onNewGame, width, height, this.dim_coef );
+
         container.add( menuPane, BorderLayout.CENTER );
+
+        this.addKeyListener( new InternKeyListener() );
+        //this.fullScreen();
 
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.pack();
+        this.requestFocus();
         this.setResizable(false);
         this.setLocationRelativeTo(null);
         this.setVisible(true);
+    }
+
+    private double adaptCoefToScreenSize( Dimension screen_size )
+    {
+        final long small = 1024 * 780;
+        final long size  = screen_size.width * screen_size.height;
+
+        return size > small ? 2 : 3;
+    }
+
+    private void quitFullScreen() {
+        System.exit( 0 );
+    }
+
+    private void fullScreen()
+    {
+        this.setExtendedState( JFrame.MAXIMIZED_BOTH );
+        this.setUndecorated( true );
     }
 
     private void initControler( Controler controler ) {
@@ -66,20 +94,21 @@ public class Frame extends JFrame implements View
         this.jukebox.start();
 
         this.gamePane       = new GamePane( this.dim_coef );
-        this.inventoryPane  = new InventoryPane();
+        this.inventoryPane  = new InventoryPane( this.game_pane_dim.width, this.dim_coef );
         Container container = this.getContentPane();
 
         container.add( this.gamePane, BorderLayout.CENTER );
-        //container.add( this.inventoryPane );
+        container.add( this.inventoryPane, BorderLayout.SOUTH );
 
         controler.setPlayerWidth( this.gamePane.getPlayerWidth() );
         controler.setPlayerHeight( this.gamePane.getPlayerHeight() );
 
+        this.pack();
         this.controler.start();
-        this.addKeyListener( this.keyListener );
         this.requestFocusInWindow();
         this.revalidate();
         this.repaint();
+        in_game = true;
     }
 
     public void onNewGame()
@@ -111,8 +140,8 @@ public class Frame extends JFrame implements View
 
     @Override
     public void onEndGame( Controler controler ) {
+        in_game = false;
         this.jukebox.stop();
-        this.removeKeyListener( this.keyListener );
         this.initControler( controler );
         Container container = this.getContentPane();
         if ( this.gamePane != null || this.inventoryPane != null ) {
@@ -145,21 +174,32 @@ public class Frame extends JFrame implements View
         return this.gamePane.isFadeInFinished();
     }
 
+    @Override
+    public void onKeyFound(int key_id) {
+        this.gamePane.onKeyFound();
+        this.inventoryPane.onKeyFound( key_id );
+    }
+
     private class InternKeyListener implements KeyListener
     {
         @Override
         public void keyReleased(KeyEvent e) {
-            controler.stopMotion();
+            if ( in_game ) controler.stopMotion();
         }
 
         @Override
         public void keyTyped(KeyEvent e) {
-            controler.recordMove( getDirection( e ) );
+            if ( in_game )    controler.recordMove( getDirection( e ) );
         }
 
         @Override
         public void keyPressed(KeyEvent e) {
-            controler.recordMove( getDirection( e ) );
+            if ( e.getKeyCode() == KeyEvent.VK_ESCAPE )
+            {
+                System.out.println("escape pressed");
+                quitFullScreen();
+            }
+            else if ( in_game) controler.recordMove( getDirection( e ) );
         }
 
         private Direction getDirection(KeyEvent e) {
@@ -186,4 +226,5 @@ public class Frame extends JFrame implements View
             return e.getKeyCode() == KeyEvent.VK_DOWN;
         }
     }
+
 }

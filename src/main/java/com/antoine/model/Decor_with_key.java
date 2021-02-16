@@ -3,6 +3,8 @@ package com.antoine.model;
 import com.antoine.contracts.Decor_key;
 import com.antoine.contracts.RenderedEntity;
 import com.antoine.contracts.View;
+import com.antoine.physics.AABB;
+import com.antoine.physics.ColliderChecker;
 
 public class Decor_with_key extends Decor_1D implements Decor_key
 {
@@ -38,8 +40,15 @@ public class Decor_with_key extends Decor_1D implements Decor_key
     }
 
     @Override
-    public void update()
-    {
-        super.update();
+    protected void checkOtherCollides() {
+        if ( key != null )
+        {// Key had been found
+            AABB aabb = new AABB( key.getX(), key.getY(), key.getWidth(), key.getHeight() );
+            if ( ColliderChecker.hasKey( player, aabb ))
+            {// player collides with key
+                kListener.onKeyFound( key_id );
+                this.key = null;
+            }
+        }
     }
 }

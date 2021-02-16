@@ -63,7 +63,7 @@ public class GamePane extends JPanel
         this.rDecor.render( g, this.entities, inTransition );
 
         Color oldColor = g.getColor();
-
+        /*
         g.setColor( Color.BLACK );
 
         for ( int i = 0; boxes != null && i < boxes.length; i++ )
@@ -122,13 +122,13 @@ public class GamePane extends JPanel
             RenderedEntity p = (RenderedEntity) entities[0];
             g.drawLine( p.getX(), p.getY() + p.getHeight() - 10, p.getX() + p.getWidth(), p.getY() + p.getHeight() - 10);
         }
-
+        */
         if ( inTransition ) {
             g.setColor( new Color( 0, 0, 0, ALPHA) );
             g.fillRect(0, 0, this.getWidth(), this.getHeight());
         }
         g.setColor( oldColor );
-    g.dispose();
+        g.dispose();
     }
 
     public void render( Decor decor )
@@ -184,5 +184,9 @@ public class GamePane extends JPanel
 
     public boolean isFadeInFinished() {
         return ALPHA == 0;
+    }
+
+    public void onKeyFound() {
+
     }
 }

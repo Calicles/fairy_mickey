@@ -12,6 +12,7 @@ public abstract class Abstract_Decor implements Decor {
     protected int           id;
     protected int           next_decor_id;
     protected static Player player;
+    protected static KeyFoundListener kListener;
     protected Direction     last_player_dir;
     protected double        player_distance_ratio;
     protected double        player_distance_transform_speed;
@@ -82,6 +83,11 @@ public abstract class Abstract_Decor implements Decor {
     public static void setPlayer( Player _player )
     {
         Abstract_Decor.player = _player;
+    }
+
+    public static void setKeyFoundListener( KeyFoundListener listener )
+    {
+        kListener = listener;
     }
 
     public void setPlayerLastDirection( Direction direction )
