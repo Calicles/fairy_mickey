@@ -35,6 +35,11 @@ public class JsonHelper {
             json = new JSONObject( json_str.toString() );
         } catch ( IOException exc ){
             throw new UncheckedIOException( "lecture impossible : " + file_name_str, exc );
+        } catch ( RuntimeException exc ) {
+            throw exc;
+        } catch ( Exception exc ) {
+            // JSONException est une exception vérifiée sur Android
+            throw new IllegalArgumentException( "json invalide : " + file_name_str, exc );
         }
         return json;
     }

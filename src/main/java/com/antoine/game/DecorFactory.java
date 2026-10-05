@@ -19,7 +19,22 @@ public class DecorFactory {
     static {
         json = JsonHelper.strToJson( JSON_FILE_PATH );
         // valeur par défaut ; le jeu desktop l'adapte à l'écran via setDimCoef
-        dim_coef = JsonHelper.strToJson( "/jsons/conf.json" ).getDouble( "dim_coef" );
+        dim_coef = readDefaultDimCoef();
+    }
+
+    /*
+     * Les méthodes de lecture du json déclarent "throws Exception" : JSONException est
+     * non vérifiée avec la bibliothèque org.json du desktop mais vérifiée sur Android.
+     */
+    private static double readDefaultDimCoef()
+    {
+        try {
+            return JsonHelper.strToJson( "/jsons/conf.json" ).getDouble( "dim_coef" );
+        } catch ( RuntimeException e ) {
+            throw e;
+        } catch ( Exception e ) {
+            throw new IllegalStateException( "dim_coef absent de conf.json", e );
+        }
     }
 
     /**
@@ -37,7 +52,7 @@ public class DecorFactory {
         dim_coef = coef;
     }
 
-    static void build( Abstract_Decor decor, JSONObject decor_json )
+    static void build( Abstract_Decor decor, JSONObject decor_json ) throws Exception
     {
         decor.setPlayer_distance_transform_speed( decor_json.getDouble( "distance_ratio_speed" ));
         decor.setPlayer_distance_ratio( decor_json.getInt( "distance_ratio" ));
@@ -69,7 +84,7 @@ public class DecorFactory {
     }
 
 
-    static void build1D( Decor_1D decor, JSONObject decor_json) {
+    static void build1D( Decor_1D decor, JSONObject decor_json) throws Exception {
         JSONArray lineMask = decor_json.getJSONArray( "line_mask" );
         for ( int i = 0; i < lineMask.length(); ++i )
         {
@@ -80,7 +95,7 @@ public class DecorFactory {
         decor.setIs_vertical( decor_json.getBoolean( "is_vertical" ));
     }
 
-    static void build2D( Decor_2D decor, JSONObject decor_json )
+    static void build2D( Decor_2D decor, JSONObject decor_json ) throws Exception
     {
         JSONArray solids = decor_json.getJSONArray( "solids" );
         for (int i = 0; i < solids.length(); i++) {
@@ -96,7 +111,7 @@ public class DecorFactory {
         }
     }
 
-    static void buildWithKey(Decor_key decor, JSONObject decor_json )
+    static void buildWithKey(Decor_key decor, JSONObject decor_json ) throws Exception
     {
         JSONObject key = decor_json.getJSONObject( "key" );
         decor.setKeyId( decor_json.getInt( "key_id" ));
@@ -105,7 +120,7 @@ public class DecorFactory {
     }
 
 
-    static Decor_1D createDecor1D(JSONObject decor_json, int id)
+    static Decor_1D createDecor1D(JSONObject decor_json, int id) throws Exception
     {
         Decor_1D decor = new Decor_1D( id );
         build( decor, decor_json );
@@ -113,7 +128,7 @@ public class DecorFactory {
         return decor;
     }
 
-    static Decor_2D createDecor2D(JSONObject decor_json, int id)
+    static Decor_2D createDecor2D(JSONObject decor_json, int id) throws Exception
     {
         Decor_2D decor = new Decor_2D( id );
         build( decor, decor_json );
@@ -122,7 +137,7 @@ public class DecorFactory {
         return decor;
     }
 
-    static Decor_with_key createDecorWithKey(JSONObject decor_json, int id)
+    static Decor_with_key createDecorWithKey(JSONObject decor_json, int id) throws Exception
     {
         Decor_with_key decor = new Decor_with_key( id );
         build( decor, decor_json );
@@ -133,7 +148,7 @@ public class DecorFactory {
     }
 
 
-    private static Decor createDecorWithKey2D(JSONObject decor_json, int id) {
+    private static Decor createDecorWithKey2D(JSONObject decor_json, int id) throws Exception {
         Decor_with_key_2d decor = new Decor_with_key_2d( id );
         build       ( decor, decor_json );
         build2D     ( decor, decor_json );
@@ -146,10 +161,24 @@ public class DecorFactory {
         if ( container.containsKey( id )) {
             return container.get( id );
         }
+        Decor decor;
+        try {
+            decor = createDecor( id );
+        } catch ( RuntimeException e ) {
+            throw e;
+        } catch ( Exception e ) {
+            throw new IllegalStateException( "décor " + id + " invalide dans " + JSON_FILE_PATH, e );
+        }
+        container.put( id, decor );
+        return decor;
+    }
+
+    private static Decor createDecor( int id ) throws Exception
+    {
         String id_str = Integer.toString( id );
         org.json.JSONObject decor_json = json.getJSONObject( id_str );
         int type = decor_json.getInt( "type" );
-        Decor decor = null;
+        Decor decor;
         switch ( type )
         {
             case 1:
@@ -163,8 +192,10 @@ public class DecorFactory {
                 break;
             case 4:
                 decor = createDecorWithKey2D( decor_json, id );
+                break;
+            default:
+                throw new IllegalStateException( "type de décor inconnu : " + type );
         }
-        container.put( id, decor );
         decor.setPlayerLastDirection(
                 Direction_helper.strToDir( decor_json.getString( "player_entrance_direction" )));
         return decor;
