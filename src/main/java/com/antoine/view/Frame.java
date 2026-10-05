@@ -14,6 +14,8 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.util.ArrayDeque;
+import java.util.Deque;
 
 
 public class Frame extends JFrame implements View
@@ -182,48 +184,53 @@ public class Frame extends JFrame implements View
 
     private class InternKeyListener implements KeyListener
     {
+        /** flèches actuellement enfoncées, la dernière pressée en fin de liste */
+        private final Deque< Direction > pressed = new ArrayDeque<>( 4 );
+
         @Override
         public void keyReleased(KeyEvent e) {
-            if ( in_game ) controler.stopMotion();
+            Direction direction = getDirection( e );
+            if ( direction == null ) return;
+            pressed.remove( direction );
+            if ( ! in_game ) return;
+            controler.stopMotion();
+            if ( ! pressed.isEmpty() ) {
+                // une autre flèche est toujours enfoncée : on reprend sa direction
+                controler.recordMove( pressed.peekLast() );
+            }
         }
 
         @Override
         public void keyTyped(KeyEvent e) {
-            if ( in_game )    controler.recordMove( getDirection( e ) );
+            // getKeyCode() vaut toujours VK_UNDEFINED ici : rien à faire
         }
 
         @Override
         public void keyPressed(KeyEvent e) {
             if ( e.getKeyCode() == KeyEvent.VK_ESCAPE )
             {
-                System.out.println("escape pressed");
                 quitFullScreen();
+                return;
             }
-            else if ( in_game) controler.recordMove( getDirection( e ) );
+            Direction direction = getDirection( e );
+            if ( direction == null ) return;
+            // la répétition automatique du clavier ne doit pas dupliquer la touche
+            pressed.remove( direction );
+            pressed.addLast( direction );
+            if ( in_game ) controler.recordMove( direction );
         }
 
+        /**
+         * @return la direction associée à la flèche, ou null si la touche n'est pas une flèche
+         */
         private Direction getDirection(KeyEvent e) {
-            if ( isKeyLeft( e ) ) return Direction.LEFT;
-            else if ( isKeyRight( e ) ) return Direction.RIGHT;
-            else if ( isKeyUp( e ) ) return Direction.UP;
-            else return Direction.BOTTOM;
-        }
-
-
-        private boolean isKeyLeft(KeyEvent e) {
-            return e.getKeyCode() == KeyEvent.VK_LEFT;
-        }
-
-        private boolean isKeyRight(KeyEvent e) {
-            return e.getKeyCode() == KeyEvent.VK_RIGHT;
-        }
-
-        private boolean isKeyUp(KeyEvent e) {
-            return e.getKeyCode() == KeyEvent.VK_UP;
-        }
-
-        private boolean isKeyDown(KeyEvent e) {
-            return e.getKeyCode() == KeyEvent.VK_DOWN;
+            switch ( e.getKeyCode() ) {
+                case KeyEvent.VK_LEFT:  return Direction.LEFT;
+                case KeyEvent.VK_RIGHT: return Direction.RIGHT;
+                case KeyEvent.VK_UP:    return Direction.UP;
+                case KeyEvent.VK_DOWN:  return Direction.BOTTOM;
+                default:                return null;
+            }
         }
     }
 
