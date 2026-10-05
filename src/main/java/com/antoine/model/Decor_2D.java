@@ -16,25 +16,8 @@ public class Decor_2D extends Abstract_Decor
     }
 
     @Override
-    public void update() {
-        if ( ! starting && ! ending ) {
-            DecorExit exit = ColliderChecker.isPlayerExited( this.player, this.exit_boxes );
-            if ( exit != null ) {
-                this.next_decor_id = exit.getNext_decor_id();
-                this.ending = true;
-                super.last_player_dir = player.getDirection();
-            } else {
-                if ( this.player.isMoving() )
-                {
-                    ColliderChecker.seekCollide( this.player, this.obstacle_mask );
-                    checkOtherCollides();
-                    this.player.translate();
-                }
-            }
-        }
-    }
-
-    protected void checkOtherCollides() {
+    protected void constrainPlayerMove() {
+        ColliderChecker.seekCollide( player, this.obstacle_mask );
     }
 
     public void createShape()

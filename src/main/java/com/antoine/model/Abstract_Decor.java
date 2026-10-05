@@ -2,6 +2,7 @@ package com.antoine.model;
 
 import com.antoine.contracts.*;
 import com.antoine.helpers.Direction_helper;
+import com.antoine.physics.ColliderChecker;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -23,9 +24,32 @@ public abstract class Abstract_Decor implements Decor {
     protected boolean starting = true;
     protected boolean ending   = false;
 
-    public abstract void update();
-
     public abstract void setPlayerDirection( Direction direction );
+
+    /**
+     * Adapte le vecteur de déplacement du joueur aux contraintes du décor (ligne, obstacles).
+     */
+    protected abstract void constrainPlayerMove();
+
+    /**
+     * Collisions propres au décor (clé...), vérifiées avant chaque déplacement du joueur.
+     */
+    protected void checkOtherCollides() {}
+
+    @Override
+    public void update() {
+        if ( starting || ending ) return;
+        DecorExit exit = ColliderChecker.isPlayerExited( player, this.exit_boxes );
+        if ( exit != null ) {
+            this.next_decor_id   = exit.getNext_decor_id();
+            this.ending          = true;
+            this.last_player_dir = player.getDirection();
+        } else if ( player.isMoving() ) {
+            constrainPlayerMove();
+            checkOtherCollides();
+            player.translate();
+        }
+    }
 
     protected Abstract_Decor( int _id )
     {
