@@ -85,17 +85,18 @@ public class RenderedDecor {
     protected void drawEntities(Graphics g, RenderedEntity[] entities, boolean inTransition) {
         if ( entities != null ) {
             RenderedMotionEntity player = (RenderedMotionEntity) entities[0];
+            ArrayList< BufferedImage > sprites = player_imgs.get( player.getDirection() );
             if ( player.isMoving() && ! inTransition ) {
                 ++anim_slower;
                 if (( anim_slower % ANIM_SLOWER_MAX ) == 0 ) {
                     anim_slower = 0;
-                    player_sprite_index = (++player_sprite_index) % player_imgs.size();
+                    player_sprite_index = ( player_sprite_index + 1 ) % sprites.size();
                 }
             } else {
                 player_sprite_index = 0;
             }
             g.drawImage(
-                    player_imgs.get( player.getDirection() ).get( player_sprite_index ),
+                    sprites.get( player_sprite_index ),
                     player.getX(),
                     player.getY(),
                     player.getWidth(),
