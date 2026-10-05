@@ -29,7 +29,6 @@ public class InventoryPane  extends JPanel
         this.images = new KeyImage[ key_names.length ];
         for ( int i = 0; i < key_names.length; i++ )
         {
-            System.out.println(path+key_names[i]);
             this.images[ i ] = new KeyImage( path + key_names[i], key_ids[i] );
             this.add ( this.images[i] );
         }
@@ -49,22 +48,6 @@ public class InventoryPane  extends JPanel
             img.setKeyFound();
             this.repaint();
         }
-    }
-
-
-    /**
-     * @see JPanel#paintComponent(Graphics)
-     * @param g graphics chargé de l'affichage.
-     */
-    @Override
-    public void paintComponent(Graphics g) {
-        super.paintComponent(g);
-        // draw
-    }
-
-    public void render()
-    {
-        this.repaint();
     }
 
     private class KeyImage extends JPanel

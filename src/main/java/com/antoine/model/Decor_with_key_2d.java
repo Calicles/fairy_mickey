@@ -5,8 +5,6 @@ import com.antoine.contracts.RenderedEntity;
 import com.antoine.physics.AABB;
 import com.antoine.physics.ColliderChecker;
 
-import java.util.ArrayList;
-
 public class Decor_with_key_2d extends Decor_2D implements Decor_key
 {
     private Entity key;

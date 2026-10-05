@@ -1,10 +1,8 @@
 package com.antoine.helpers;
 
 import org.json.JSONObject;
-import org.json.JSONTokener;
 
 import java.io.*;
-import java.net.URISyntaxException;
 
 public class JsonHelper {
     public static JSONObject strToJson( String file_name_str ) {

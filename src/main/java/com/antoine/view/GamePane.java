@@ -6,13 +6,8 @@ import com.antoine.contracts.RenderedEntity;
 import com.antoine.helpers.Direction_helper;
 import com.antoine.helpers.ImageReader;
 import com.antoine.helpers.JsonHelper;
-import com.antoine.model.Shape;
-import com.antoine.physics.ColliderChecker;
 import org.json.JSONArray;
 import org.json.JSONObject;
-
-//TODO rmove
-import com.antoine.model.Point;
 
 import javax.swing.*;
 import java.awt.*;
@@ -25,10 +20,6 @@ public class GamePane extends JPanel
     private RenderedDecor rDecor;
     private RenderedEntity[] entities;
 
-    // TODO remode
-    private ArrayList< Point >[] boxes;
-    private ArrayList< Point >[] solids;
-    private Shape collision;
     private int         ALPHA = 0;
     private final int   ALPHA_MAX = 255;
     private final int   ALPHA_STEP = 2;
@@ -63,66 +54,6 @@ public class GamePane extends JPanel
         this.rDecor.render( g, this.entities, inTransition );
 
         Color oldColor = g.getColor();
-        /*
-        g.setColor( Color.BLACK );
-
-        for ( int i = 0; boxes != null && i < boxes.length; i++ )
-        {
-            for ( int j = 0; j < boxes[i].size(); j++ )
-            {
-                int x2, y2;
-                if ( j == boxes[i].size() - 1 ){
-                    x2 = boxes[i].get(0).getX();
-                    y2 = boxes[i].get(0).getY();
-                } else
-                {
-                    x2 = boxes[i].get( j+1).getX();
-                    y2 = boxes[i].get(j+1).getY();
-                }
-                g.drawLine( boxes[i].get(j).getX(), boxes[i].get(j).getY(), x2, y2);
-            }
-        }
-        g.setColor( Color.CYAN );
-        if ( solids!= null )
-        {
-            for ( int i = 0; i < solids.length; i++ )
-            {
-                if ( solids[i].size() == 2 ) {
-                    g.drawLine( solids[i].get(0).getX(), solids[i].get(0).getY(), solids[i].get(1).getX(), solids[i].get(1).getY());
-                } else {
-                    for (int j = 0; j < solids[i].size(); j++) {
-                        int x2, y2;
-                        if (j == solids[i].size() - 1) {
-                            x2 = solids[i].get(0).getX();
-                            y2 = solids[i].get(0).getY();
-                        } else {
-                            x2 = solids[i].get(j + 1).getX();
-                            y2 = solids[i].get(j + 1).getY();
-                        }
-                        g.drawLine(solids[i].get(j).getX(), solids[i].get(j).getY(), x2, y2);
-                    }
-                }
-
-            }
-        }
-
-        g.setColor( Color.green );
-        if ( ColliderChecker.nexttep != null ) {
-            g.drawOval(ColliderChecker.playerMiddle.getX() - 10, ColliderChecker.playerMiddle.getY() - 10, 20, 20 );
-            g.drawOval( ColliderChecker.nexttep.getX() - 40, ColliderChecker.nexttep.getY() - 40, 80, 80 );
-        }
-
-        g.setColor( Color.MAGENTA );
-
-        if ( ColliderChecker.collide != null )
-        {
-            Point p1 = ColliderChecker.collide.p1;
-            Point p2 = ColliderChecker.collide.p2;
-            g.drawLine(p1.getX(), p1.getY(), p2.getX(), p2.getY());
-            RenderedEntity p = (RenderedEntity) entities[0];
-            g.drawLine( p.getX(), p.getY() + p.getHeight() - 10, p.getX() + p.getWidth(), p.getY() + p.getHeight() - 10);
-        }
-        */
         if ( inTransition ) {
             g.setColor( new Color( 0, 0, 0, ALPHA) );
             g.fillRect(0, 0, this.getWidth(), this.getHeight());
@@ -133,10 +64,6 @@ public class GamePane extends JPanel
     public void render( Decor decor )
     {
         this.entities = decor.getEntities();
-        // TODO REMOVE TWICE
-        this.boxes = decor.getExit();
-        this.solids = decor.getLines();
-        this.collision = decor.getCollision();
         this.inTransition = decor.isEnding() || decor.isStarting();
         this.repaint();
     }

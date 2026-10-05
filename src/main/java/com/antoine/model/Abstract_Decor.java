@@ -1,10 +1,8 @@
 package com.antoine.model;
 
 import com.antoine.contracts.*;
-import com.antoine.events.DecorChangeEvent;
 import com.antoine.helpers.Direction_helper;
 
-import java.awt.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -35,11 +33,6 @@ public abstract class Abstract_Decor implements Decor {
         this.exit_boxes         = new ArrayList<>(2);
         player_reentring_pos    = new HashMap<>(3);
         entrance_anchors        = new HashMap<>(3);
-    }
-    protected Abstract_Decor( int _id, Player _p )
-    {
-        this( _id );
-        this.player = _p;
     }
 
     public void setEntringPlayerCoordinates() {
@@ -131,9 +124,6 @@ public abstract class Abstract_Decor implements Decor {
     @Override
     public boolean isStarting() { return this.starting; }
 
-    @Override
-    public Shape getCollision() { return null;}
-
     public static void setPlayer( Player _player )
     {
         Abstract_Decor.player = _player;
@@ -156,25 +146,6 @@ public abstract class Abstract_Decor implements Decor {
 
     @Override
     public int getId() { return this.id; }
-
-    //TODO REMOVE
-    @Override
-    public ArrayList< Point >[] getExit()
-    {
-        ArrayList< Point >[] exits = new ArrayList[ this.exit_boxes.size() ];
-        for ( int i = 0; i < exit_boxes.size(); i++ )
-        {
-            exits[ i ] = exit_boxes.get( i ).getPoints();
-        }
-        return exits;
-    }
-    //TODO REMOVE
-    @Override
-    public ArrayList< Point >[] getLines()
-    {
-        return null;
-    }
-
 
     @Override
     public RenderedEntity[] getEntities(){

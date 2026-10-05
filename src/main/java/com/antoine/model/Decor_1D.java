@@ -16,15 +16,6 @@ public class Decor_1D extends Abstract_Decor
         line_mask = new ArrayList<>(5);
     }
 
-    // TODO REMOVE
-    @Override
-    public ArrayList< Point >[] getLines()
-    {
-        ArrayList< Point >[] line = new ArrayList[ 1 ];
-        line[0] = this.line_mask;
-        return line;
-    }
-
     @Override
     public void update() {
         if ( ! starting && ! ending ) {
@@ -55,12 +46,6 @@ public class Decor_1D extends Abstract_Decor
     public void addPointToMask( int x, int y )
     {
         line_mask.add( new Point( x, y ));
-    }
-
-    @Override
-    public void setEntringPlayerCoordinates()
-    {
-        super.setEntringPlayerCoordinates();
     }
 
     @Override

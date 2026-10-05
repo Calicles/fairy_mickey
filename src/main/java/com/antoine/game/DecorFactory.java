@@ -2,7 +2,6 @@ package com.antoine.game;
 
 import com.antoine.contracts.Decor;
 import com.antoine.contracts.Decor_key;
-import com.antoine.contracts.Direction;
 import com.antoine.helpers.DimensionHelper;
 import com.antoine.helpers.Direction_helper;
 import com.antoine.helpers.JsonHelper;

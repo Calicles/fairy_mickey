@@ -2,7 +2,6 @@ package com.antoine.model;
 
 import com.antoine.contracts.Decor_key;
 import com.antoine.contracts.RenderedEntity;
-import com.antoine.contracts.View;
 import com.antoine.physics.AABB;
 import com.antoine.physics.ColliderChecker;
 

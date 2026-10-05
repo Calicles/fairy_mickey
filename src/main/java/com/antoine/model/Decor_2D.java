@@ -1,26 +1,19 @@
 package com.antoine.model;
 
 import com.antoine.contracts.Direction;
-import com.antoine.contracts.View;
-import com.antoine.helpers.Direction_helper;
 import com.antoine.physics.ColliderChecker;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 
 public class Decor_2D extends Abstract_Decor
 {
     private ArrayList< Shape > obstacle_mask;
-    protected Shape collision;
 
     public Decor_2D( int _id )
     {
         super( _id );
         obstacle_mask = new ArrayList<>(5);
     }
-
-    @Override
-    public Shape getCollision() { return this.collision; }
 
     @Override
     public void update() {
@@ -33,7 +26,7 @@ public class Decor_2D extends Abstract_Decor
             } else {
                 if ( this.player.isMoving() )
                 {
-                    this.collision = ColliderChecker.seekCollide( this.player, this.obstacle_mask );
+                    ColliderChecker.seekCollide( this.player, this.obstacle_mask );
                     checkOtherCollides();
                     this.player.translate();
                 }
@@ -42,19 +35,6 @@ public class Decor_2D extends Abstract_Decor
     }
 
     protected void checkOtherCollides() {
-    }
-
-    //TODO REMOVE
-    @Override
-    public ArrayList< Point >[] getLines()
-    {
-        ArrayList< Point >[] boxes = new ArrayList[ this.obstacle_mask.size() ];
-
-        for ( int i = 0; i < boxes.length; i++ )
-        {
-            boxes[i] = this.obstacle_mask.get(i).getPoints();
-        }
-        return boxes;
     }
 
     public void createShape()

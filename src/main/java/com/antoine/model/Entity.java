@@ -18,11 +18,6 @@ public class Entity implements RenderedEntity {
         this.height = _height;
     }
 
-    public void translate( int dx, int dy )
-    {
-        coordinates.translate( dx, dy );
-    }
-
     public int getWidth() { return width; }
     public int getHeight() { return height; }
 

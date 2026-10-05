@@ -4,10 +4,6 @@ import com.antoine.helpers.JsonHelper;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import java.io.BufferedReader;
-import java.io.FileReader;
-import java.io.IOException;
-
 public class RenderedDecorFactory {
 
     private static final String JSON_FILE_PATH = "/jsons/decorImages.json";
@@ -15,12 +11,7 @@ public class RenderedDecorFactory {
     private static JSONObject json;
 
     static {
-        try
-        {
-            json = JsonHelper.strToJson( JSON_FILE_PATH );
-        } catch ( ExceptionInInitializerError e ) {
-            System.out.println( e.getMessage());
-        }
+        json = JsonHelper.strToJson( JSON_FILE_PATH );
     }
 
     public static RenderedDecor getRenderedDecor( int id )

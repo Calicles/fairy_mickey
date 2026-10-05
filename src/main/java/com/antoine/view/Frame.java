@@ -4,7 +4,6 @@ import com.antoine.contracts.Controler;
 import com.antoine.contracts.Decor;
 import com.antoine.contracts.Direction;
 import com.antoine.contracts.View;
-import com.antoine.events.PlayerGrabKeyEvent;
 import com.antoine.helpers.DimensionHelper;
 import com.antoine.helpers.JsonHelper;
 import com.antoine.sound.Jukebox;
@@ -126,11 +125,6 @@ public class Frame extends JFrame implements View
     @Override
     public void loadDecor(int nextDecorId) {
         this.gamePane.load( nextDecorId );
-    }
-
-    @Override
-    public void onPlayerGrabKey(PlayerGrabKeyEvent event) {
-
     }
 
     @Override

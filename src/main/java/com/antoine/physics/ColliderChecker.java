@@ -10,10 +10,7 @@ import java.util.stream.Stream;
 
 public class ColliderChecker {
 
-    public static Line collide;
-    public static Point nexttep;
-    public static Point playerMiddle;
-    public static CohenSutherland cs = new CohenSutherland();
+    private static CohenSutherland cs = new CohenSutherland();
 
     private static AABB playerToAABB( Mover mover ) {
         return new AABB(
@@ -37,8 +34,7 @@ public class ColliderChecker {
         int ySign = (mover.getDy() != 0 ) ? (int) Math.signum( mover.getDy() ) : 0;
 
         for ( int i = 1; i <= mover.getSpeed(); ++i ) {
-            int dx = 1 * xSign, dy = 1 * ySign;
-            player.translate( dx, dy );
+            player.translate( xSign, ySign );
             cs.setClip( player );
             for ( Shape s : shapes ) {
                 if ( checkCollide( s, player)) {
@@ -47,8 +43,6 @@ public class ColliderChecker {
                 }
             }
             if ( shape != null ) {
-                dx = (i - 1) * xSign;
-                dy = (i - 1) * ySign;
                 mover.setVector( (i - 1) * xSign, (i - 1) * ySign );
                 break;
             }
@@ -67,9 +61,6 @@ public class ColliderChecker {
                 end = shape.getPoint( i + 1 );
             }
             if ( cs.clip( start, end )) {
-                collide = new Line();
-                collide.p1 = start;
-                collide.p2 = end;
                 return true;
             }
         }
@@ -125,13 +116,11 @@ public class ColliderChecker {
         Direction dir   = mover.getDirection();
         Point middle    = new Point(mover.getX() + mover.getWidth() / 2 , mover.getY() + mover.getHeight() );
         Point nextPoint = findNextStep( middle, line, dir );
-        nexttep         = nextPoint;
 
         if ( nextPoint == null ) {
             mover.setVector( 0, 0 );
         }
         else {
-            playerMiddle = middle;
             // la correction est bornée à la distance restante pour ne pas osciller autour de la ligne
             if ( dir == Direction.UP || dir == Direction.BOTTOM ) {
                 int gap = nextPoint.getX() - middle.getX();

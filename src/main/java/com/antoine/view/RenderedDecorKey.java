@@ -1,7 +1,6 @@
 package com.antoine.view;
 
 import com.antoine.contracts.RenderedEntity;
-import com.antoine.contracts.RenderedMotionEntity;
 import com.antoine.helpers.ImageReader;
 
 import java.awt.*;
