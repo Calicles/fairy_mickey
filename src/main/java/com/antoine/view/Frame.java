@@ -4,7 +4,6 @@ import com.antoine.contracts.Controler;
 import com.antoine.contracts.Decor;
 import com.antoine.contracts.Direction;
 import com.antoine.contracts.View;
-import com.antoine.helpers.DimensionHelper;
 import com.antoine.helpers.JsonHelper;
 import com.antoine.sound.Jukebox;
 import com.antoine.sound.SoundEffect;

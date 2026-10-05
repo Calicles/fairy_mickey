@@ -1,6 +1,5 @@
 package com.antoine.view;
 
-import com.antoine.helpers.DimensionHelper;
 
 import javax.swing.*;
 import java.awt.*;

@@ -1,4 +1,4 @@
-package com.antoine.helpers;
+package com.antoine.view;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;

@@ -2,7 +2,6 @@ package com.antoine.game;
 
 import com.antoine.contracts.Decor;
 import com.antoine.contracts.Decor_key;
-import com.antoine.helpers.DimensionHelper;
 import com.antoine.helpers.Direction_helper;
 import com.antoine.helpers.JsonHelper;
 import com.antoine.model.*;
@@ -19,7 +18,23 @@ public class DecorFactory {
 
     static {
         json = JsonHelper.strToJson( JSON_FILE_PATH );
-        dim_coef = DimensionHelper.getDimCoef();
+        // valeur par défaut ; le jeu desktop l'adapte à l'écran via setDimCoef
+        dim_coef = JsonHelper.strToJson( "/jsons/conf.json" ).getDouble( "dim_coef" );
+    }
+
+    /**
+     * Coefficient d'agrandissement appliqué aux coordonnées du json.
+     * Doit être appelé avant setPlayer et avant la construction du premier décor.
+     */
+    /** oublie les décors déjà construits (nouvelle partie) */
+    public static void clear()
+    {
+        container.clear();
+    }
+
+    public static void setDimCoef( double coef )
+    {
+        dim_coef = coef;
     }
 
     static void build( Abstract_Decor decor, JSONObject decor_json )

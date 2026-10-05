@@ -4,7 +4,6 @@ import com.antoine.contracts.Decor;
 import com.antoine.contracts.Direction;
 import com.antoine.contracts.RenderedEntity;
 import com.antoine.helpers.Direction_helper;
-import com.antoine.helpers.ImageReader;
 import com.antoine.helpers.JsonHelper;
 import org.json.JSONArray;
 import org.json.JSONObject;

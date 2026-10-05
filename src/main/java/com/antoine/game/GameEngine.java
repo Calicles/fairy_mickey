@@ -4,37 +4,43 @@ import com.antoine.contracts.*;
 import com.antoine.model.Abstract_Decor;
 import com.antoine.model.Player;
 
-import javax.swing.*;
+/**
+ * Logique du jeu indépendante de l'interface : chaque plateforme (Swing, Android)
+ * fournit sa boucle en appelant {@link #tick()} environ 60 fois par seconde.
+ */
+public abstract class GameEngine implements Controler, KeyFoundListener {
 
-public class Game implements Controler, KeyFoundListener {
-
-    private static final int FPS_TARGET = 60;
+    public static final int FPS_TARGET = 60;
 
     private boolean running = true;
-    private final   Player player;
+    protected final Player player;
     private Decor   decor;
-    private View    view;
-    /** la boucle de jeu tourne sur l'EDT, comme le rendu et les événements clavier */
-    private final Timer gameLoop;
+    protected View  view;
 
-    public Game()
+    protected GameEngine( double dimCoef )
     {
         this.player = new Player( 0, 0, 1 );
         this.player.setDirection( Direction.UP );
+        DecorFactory.clear();
+        DecorFactory.setDimCoef( dimCoef );
         DecorFactory.setPlayer( this.player );
-
-        gameLoop = new Timer( 1000 / FPS_TARGET, e -> this.tick() );
-        gameLoop.setCoalesce( true );
     }
 
-    public Game( Game game ) {
-        this.player = game.player;
-        this.view   = game.view;
-        gameLoop = new Timer( 1000 / FPS_TARGET, e -> this.tick() );
-        gameLoop.setCoalesce( true );
+    /** nouvelle partie reprenant le joueur (déjà mis à l'échelle) et la vue de la précédente */
+    protected GameEngine( GameEngine previous )
+    {
+        this.player = previous.player;
+        this.view   = previous.view;
     }
 
+    /** démarre la boucle qui appelle tick() */
+    protected abstract void startLoop();
 
+    /** arrête la boucle */
+    protected abstract void stopLoop();
+
+    /** contrôleur à rendre à la vue quand la partie est finie */
+    protected abstract Controler createNextGame();
 
     private void update()
     {
@@ -64,11 +70,12 @@ public class Game implements Controler, KeyFoundListener {
         Abstract_Decor.setKeyFoundListener( this );
     }
 
-    private void tick()
+    /** une image de jeu : mise à jour du modèle puis rendu */
+    public void tick()
     {
         if ( ! running ) {
-            this.gameLoop.stop();
-            this.view.onEndGame( new Game( this ) );
+            this.stopLoop();
+            this.view.onEndGame( createNextGame() );
             return;
         }
         this.update();
@@ -97,7 +104,7 @@ public class Game implements Controler, KeyFoundListener {
     @Override
     public void start() {
         this.init();
-        this.gameLoop.start();
+        this.startLoop();
     }
 
     @Override

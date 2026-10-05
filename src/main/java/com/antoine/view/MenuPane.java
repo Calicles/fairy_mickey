@@ -1,6 +1,5 @@
 package com.antoine.view;
 
-import com.antoine.helpers.ImageReader;
 
 import javax.swing.*;
 import java.awt.*;

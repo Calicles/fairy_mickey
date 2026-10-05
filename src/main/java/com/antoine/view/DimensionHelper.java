@@ -1,4 +1,6 @@
-package com.antoine.helpers;
+package com.antoine.view;
+
+import com.antoine.helpers.JsonHelper;
 
 import org.json.JSONObject;
 
