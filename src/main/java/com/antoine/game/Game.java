@@ -98,8 +98,9 @@ public class Game implements Controler, KeyFoundListener {
     }
 
     public void onDecorEnded( int nextDecorId ) {
+        int previousDecorId = this.decor.getId();
         this.decor = DecorFactory.getDecor( nextDecorId );
-        this.decor.setEntringPlayerCoordinates();
+        this.decor.setEntringPlayerCoordinates( previousDecorId );
         this.view.loadDecor( nextDecorId );
     }
 

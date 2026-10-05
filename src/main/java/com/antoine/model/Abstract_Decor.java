@@ -18,6 +18,8 @@ public abstract class Abstract_Decor implements Decor {
     protected double        player_distance_transform_speed;
 
     protected HashMap< Direction, Point > player_reentring_pos;
+    /** coordonnées d'entrée telles que décrites dans le json, avant adaptation à la taille du joueur */
+    protected HashMap< Direction, Point > entrance_anchors;
     protected ArrayList< DecorExit >    exit_boxes;
 
     protected boolean starting = true;
@@ -32,6 +34,7 @@ public abstract class Abstract_Decor implements Decor {
         this.id = _id;
         this.exit_boxes         = new ArrayList<>(2);
         player_reentring_pos    = new HashMap<>(3);
+        entrance_anchors        = new HashMap<>(3);
     }
     protected Abstract_Decor( int _id, Player _p )
     {
@@ -40,10 +43,60 @@ public abstract class Abstract_Decor implements Decor {
     }
 
     public void setEntringPlayerCoordinates() {
+        if ( ! player_reentring_pos.containsKey( this.last_player_dir )) {
+            if ( player_reentring_pos.isEmpty() ) {
+                throw new IllegalStateException( "decor " + id + " has no player entrance" );
+            }
+            // aucune entrée pour cette direction : on prend la première disponible
+            this.last_player_dir = player_reentring_pos.keySet().iterator().next();
+        }
         this.ending   = false;
         this.starting = true;
         player.setDirection( this.getPlayerReentrantDir() );
         player.setPosition( player_reentring_pos.get( this.last_player_dir ));
+    }
+
+    @Override
+    public void setEntringPlayerCoordinates( int previous_decor_id ) {
+        Direction direction = findEntranceTowards( previous_decor_id );
+        if ( direction != null ) {
+            this.last_player_dir = direction;
+        }
+        this.setEntringPlayerCoordinates();
+    }
+
+    /**
+     * Cherche l'entrée la plus proche de la sortie qui mène au décor précédent.
+     * @return la direction de cette entrée, ou null si aucune sortie ne mène au décor précédent
+     */
+    private Direction findEntranceTowards( int previous_decor_id ) {
+        Direction best = null;
+        double best_distance = Double.MAX_VALUE;
+        for ( DecorExit exit : exit_boxes ) {
+            if ( exit.getNext_decor_id() != previous_decor_id || exit.getNbrOfPoint() == 0 ) continue;
+            for ( java.util.Map.Entry< Direction, Point > entry : entrance_anchors.entrySet() ) {
+                double distance = distanceToBoundingBox( entry.getValue(), exit );
+                if ( distance < best_distance ) {
+                    best_distance = distance;
+                    best = entry.getKey();
+                }
+            }
+        }
+        return best;
+    }
+
+    private static double distanceToBoundingBox( Point p, Shape shape ) {
+        int min_x = Integer.MAX_VALUE, min_y = Integer.MAX_VALUE;
+        int max_x = Integer.MIN_VALUE, max_y = Integer.MIN_VALUE;
+        for ( Point s : shape.getPoints() ) {
+            min_x = Math.min( min_x, s.getX() );
+            min_y = Math.min( min_y, s.getY() );
+            max_x = Math.max( max_x, s.getX() );
+            max_y = Math.max( max_y, s.getY() );
+        }
+        int dx = Math.max( Math.max( min_x - p.getX(), 0 ), p.getX() - max_x );
+        int dy = Math.max( Math.max( min_y - p.getY(), 0 ), p.getY() - max_y );
+        return Math.hypot( dx, dy );
     }
 
     public void addPlayerEntrance( String dir_name, int _x, int _y )
@@ -67,6 +120,7 @@ public abstract class Abstract_Decor implements Decor {
         }
         // add the association
         this.player_reentring_pos.put( direction, new Point( x, y ));
+        this.entrance_anchors.put( direction, new Point( _x, _y ));
     }
 
     @Override
@@ -99,6 +153,9 @@ public abstract class Abstract_Decor implements Decor {
 
     @Override
     public int getNextDecorId() { return this.next_decor_id; }
+
+    @Override
+    public int getId() { return this.id; }
 
     //TODO REMOVE
     @Override

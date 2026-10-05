@@ -16,9 +16,11 @@ public interface Decor {
     ArrayList< Point >[] getLines();
     Shape getCollision();
     int getNextDecorId();
+    int getId();
 
     void setPlayerLastDirection( Direction direction );
     void setEntringPlayerCoordinates();
+    void setEntringPlayerCoordinates( int previous_decor_id );
     void update();
 
     boolean isEnding();
