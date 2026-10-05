@@ -132,21 +132,20 @@ public class ColliderChecker {
         }
         else {
             playerMiddle = middle;
+            // la correction est bornée à la distance restante pour ne pas osciller autour de la ligne
             if ( dir == Direction.UP || dir == Direction.BOTTOM ) {
-                if ( middle.getX() < nextPoint.getX() ) {
-                    mover.setVector( mover.getSpeed(), mover.getDy());
-                } else if ( middle.getX() > nextPoint.getX() ) {
-                    mover.setVector( - mover.getSpeed(), mover.getDy());
-                }
+                int gap = nextPoint.getX() - middle.getX();
+                mover.setVector( clamp( gap, mover.getSpeed() ), mover.getDy());
             } else
             {
-                if ( middle.getY() < nextPoint.getY() ) {
-                    mover.setVector(mover.getDx(), mover.getSpeed() );
-                } else if ( middle.getY() > nextPoint.getY() ) {
-                    mover.setVector(mover.getDx(), - mover.getSpeed() );
-                }
+                int gap = nextPoint.getY() - middle.getY();
+                mover.setVector( mover.getDx(), clamp( gap, mover.getSpeed() ));
             }
         }
+    }
+
+    private static int clamp( int value, int limit ) {
+        return Math.max( - limit, Math.min( limit, value ));
     }
 
     public static boolean hasKey(Mover player, AABB key) {

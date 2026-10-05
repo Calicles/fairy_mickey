@@ -1,5 +1,7 @@
 package com.antoine.view;
 
+import com.antoine.helpers.DimensionHelper;
+
 import javax.swing.*;
 import java.awt.*;
 import java.util.Arrays;
@@ -14,7 +16,7 @@ public class InventoryPane  extends JPanel
     {
         super( true );
         this.width = width;
-        this.height = (int) (100 * dim_coef);
+        this.height = (int) (DimensionHelper.INVENTORY_HEIGHT * dim_coef);
         this.setBackground( Color.black );
         String path = "/images/objects/keys/";
         String[] key_names = { "bronze.png", "gold.png", "silver.png" };

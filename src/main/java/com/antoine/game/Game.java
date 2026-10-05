@@ -4,13 +4,18 @@ import com.antoine.contracts.*;
 import com.antoine.model.Abstract_Decor;
 import com.antoine.model.Player;
 
+import javax.swing.*;
+
 public class Game implements Controler, KeyFoundListener {
+
+    private static final int FPS_TARGET = 60;
 
     private boolean running = true;
     private final   Player player;
     private Decor   decor;
     private View    view;
-    private Thread  gameLoopThread;
+    /** la boucle de jeu tourne sur l'EDT, comme le rendu et les événements clavier */
+    private final Timer gameLoop;
 
     public Game()
     {
@@ -18,11 +23,15 @@ public class Game implements Controler, KeyFoundListener {
         this.player.setDirection( Direction.UP );
         DecorFactory.setPlayer( this.player );
 
-        gameLoopThread = new Thread( this::run );
+        gameLoop = new Timer( 1000 / FPS_TARGET, e -> this.tick() );
+        gameLoop.setCoalesce( true );
     }
 
     public Game( Game game ) {
         this.player = game.player;
+        this.view   = game.view;
+        gameLoop = new Timer( 1000 / FPS_TARGET, e -> this.tick() );
+        gameLoop.setCoalesce( true );
     }
 
 
@@ -48,41 +57,22 @@ public class Game implements Controler, KeyFoundListener {
         this.view.render( this.decor );
     }
 
-    private void sleep( long sleep )
-    {
-        try {
-            if ( sleep < 0 ) sleep = 0;
-            Thread.sleep( sleep );
-        } catch ( InterruptedException ie ) {}
-    }
-
-    void run()
+    private void init()
     {
         this.decor = DecorFactory.getDecor( 1 );
         this.decor.setEntringPlayerCoordinates();
         Abstract_Decor.setKeyFoundListener( this );
+    }
 
-        // Time gestioner
-        final long FPS_TARGET = 60;
-        final long OPTIMAL_TIME = 1000000000 / FPS_TARGET;
-
-        long update_time;
-        long wait;
-        long now;
-        // ===========
-
-        while ( running ) {
-            now = System.nanoTime();
-
-            this.update();
-            this.render();
-
-            update_time = System.nanoTime() - now;
-            wait = (OPTIMAL_TIME - update_time) / 1000000;
-
-            sleep( wait );
+    private void tick()
+    {
+        if ( ! running ) {
+            this.gameLoop.stop();
+            this.view.onEndGame( new Game( this ) );
+            return;
         }
-        this.view.onEndGame( new Game( this ) );
+        this.update();
+        this.render();
     }
 
     @Override
@@ -106,7 +96,8 @@ public class Game implements Controler, KeyFoundListener {
 
     @Override
     public void start() {
-        this.gameLoopThread.start();
+        this.init();
+        this.gameLoop.start();
     }
 
     @Override

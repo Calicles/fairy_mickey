@@ -5,6 +5,7 @@ import com.antoine.contracts.Decor;
 import com.antoine.contracts.Direction;
 import com.antoine.contracts.View;
 import com.antoine.events.PlayerGrabKeyEvent;
+import com.antoine.helpers.DimensionHelper;
 import com.antoine.helpers.JsonHelper;
 import com.antoine.sound.Jukebox;
 import com.antoine.sound.SoundEffect;
@@ -39,15 +40,10 @@ public class Frame extends JFrame implements View
         this.jukebox        = new Jukebox();
 
         JSONObject conf = JsonHelper.strToJson( "/jsons/conf.json");
-        this.dim_coef   = conf.getDouble( "dim_coef" );
-        Dimension screen_size = Toolkit.getDefaultToolkit().getScreenSize();
-        System.out.println( "Dimension: width: " + screen_size.width + "  ; height: " + screen_size.height );
-        //this.dim_coef   = adaptCoefToScreenSize( screen_size );
+        this.dim_coef   = DimensionHelper.getDimCoef();
         int width = (int) ( conf.getInt( "width" ) * this.dim_coef );
         int height = (int) ( conf.getInt( "height" ) * this.dim_coef );
         this.game_pane_dim = new Dimension( width, height );
-        int xDelta = (screen_size.width - width) / 2;
-        int yDelta = (screen_size.height - height) / 2;
         this.initControler( controler );
 
         Container container = this.getContentPane();
@@ -69,14 +65,6 @@ public class Frame extends JFrame implements View
         this.setVisible(true);
     }
 
-    private double adaptCoefToScreenSize( Dimension screen_size )
-    {
-        final long small = 1024 * 780;
-        final long size  = screen_size.width * screen_size.height;
-
-        return size > small ? 2 : 3;
-    }
-
     private void quitFullScreen() {
         System.exit( 0 );
     }
@@ -92,7 +80,12 @@ public class Frame extends JFrame implements View
         this.controler.addView( this );
     }
 
+    /** appelé par le thread audio à la fin du bruitage : la suite se fait sur l'EDT */
     public void onSoundend() {
+        SwingUtilities.invokeLater( this::startGame );
+    }
+
+    private void startGame() {
         this.jukebox.start();
 
         this.gamePane       = new GamePane( this.dim_coef );

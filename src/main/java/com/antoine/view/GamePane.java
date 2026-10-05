@@ -128,7 +128,6 @@ public class GamePane extends JPanel
             g.fillRect(0, 0, this.getWidth(), this.getHeight());
         }
         g.setColor( oldColor );
-        g.dispose();
     }
 
     public void render( Decor decor )
@@ -139,7 +138,6 @@ public class GamePane extends JPanel
         this.solids = decor.getLines();
         this.collision = decor.getCollision();
         this.inTransition = decor.isEnding() || decor.isStarting();
-        revalidate();
         this.repaint();
     }
 

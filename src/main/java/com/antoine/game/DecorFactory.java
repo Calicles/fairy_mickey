@@ -3,6 +3,7 @@ package com.antoine.game;
 import com.antoine.contracts.Decor;
 import com.antoine.contracts.Decor_key;
 import com.antoine.contracts.Direction;
+import com.antoine.helpers.DimensionHelper;
 import com.antoine.helpers.Direction_helper;
 import com.antoine.helpers.JsonHelper;
 import com.antoine.model.*;
@@ -19,7 +20,7 @@ public class DecorFactory {
 
     static {
         json = JsonHelper.strToJson( JSON_FILE_PATH );
-        dim_coef = JsonHelper.strToJson( "/jsons/conf.json" ).getDouble( "dim_coef" );
+        dim_coef = DimensionHelper.getDimCoef();
     }
 
     static void build( Abstract_Decor decor, JSONObject decor_json )
