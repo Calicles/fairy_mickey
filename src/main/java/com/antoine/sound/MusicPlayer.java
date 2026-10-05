@@ -15,7 +15,7 @@ public class MusicPlayer extends SoundMaker {
     }
 
     /**Etat pour savoir si la musique est entrain d'être utilisée ou si en pause*/
-    boolean playing;
+    volatile boolean playing;
     private Command music_end_cb;
 
     /**
@@ -37,10 +37,12 @@ public class MusicPlayer extends SoundMaker {
      */
     protected void testSleep() {
         synchronized (this) {
-            if (!playing) {
+            while (!playing && using) {
                 try {
                     wait();
                 } catch (InterruptedException ie) {
+                    Thread.currentThread().interrupt();
+                    return;
                 }
             }
         }
@@ -57,16 +59,23 @@ public class MusicPlayer extends SoundMaker {
                 int totalRead = 0;
                 byte bytes[] = new byte[1042];
 
-                while ((totalRead = ais.read(bytes, 0, bytes.length)) != -1 && using) {
+                while (using && (totalRead = ais.read(bytes, 0, bytes.length)) != -1) {
 
                     testSleep();
+                    if (!using) break;
                     bytes = adjustVolume(bytes);
                     line.write(bytes, 0, totalRead);
                 }
-                if ( this.music_end_cb != null )    this.music_end_cb.execute();
+                // fin naturelle de la piste : on laisse le tampon se vider
+                if (using) line.drain();
             } catch (IOException ioe) {
                 ioe.printStackTrace();
+            } finally {
+                line.close();
+                try { ais.close(); } catch (IOException ignored) {}
             }
+            // la piste suivante n'est enchaînée que si la musique n'a pas été arrêtée
+            if ( using && this.music_end_cb != null )    this.music_end_cb.execute();
         });
     }
 
@@ -89,6 +98,7 @@ public class MusicPlayer extends SoundMaker {
 
         synchronized(this){
             playing= false;
+            notifyAll();
         }
     }
 
@@ -98,8 +108,10 @@ public class MusicPlayer extends SoundMaker {
      */
     @Override
     public void play(){
+        synchronized(this){
+            playing = true;
+        }
         super.play();
-        playing = true;
     }
 
     /**

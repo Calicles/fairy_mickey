@@ -22,7 +22,10 @@ public class Jukebox {
 
     public void stop()
     {
-        this.current_music.arret();
+        if ( this.current_music != null ) {
+            this.current_music.arret();
+            this.current_music = null;
+        }
     }
 
     private void incrMusicIndex()

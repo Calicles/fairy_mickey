@@ -24,7 +24,7 @@ public abstract class SoundMaker {
     protected SourceDataLine line;
 
     /**Etat qui simule si l'utilisateur du lecteur est toujours d'actualité*/
-    boolean using;
+    volatile boolean using;
 
     /**Coefficient servant à ajuster le volume sonore doit être compris entre 1 et 0.
      * 1 pour état inchangé, 0 pour supression total du son.
@@ -64,7 +64,7 @@ public abstract class SoundMaker {
      * @param volume le volume (coefficient) à appliquer.
      */
     private void checkVolumeinRange(float volume){
-        if(volume < 0 && volume > 1)
+        if(volume < 0 || volume > 1)
             throw new IllegalArgumentException("volume doit être compris entre 0 et 1 :"+volume);
     }
 
