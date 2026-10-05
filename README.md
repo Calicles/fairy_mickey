@@ -43,12 +43,29 @@ Pour lancer uniquement les tests : `.\mvnw.cmd test`.
    (ou clic droit sur `pom.xml` > *Maven > Reload project*).
 2. Lancer `com.antoine.Main` (flèche verte dans `src/main/java/com/antoine/Main.java`).
 
+## Version Android
+
+Un APK de test est compilé automatiquement par GitHub Actions à chaque mise à jour de `main`
+et publié dans la release **android-latest** :
+<https://github.com/Calicles/fairy_mickey/releases/tag/android-latest>
+
+1. Ouvrir ce lien depuis le téléphone (Android 7 ou plus récent) et télécharger `fairy_mickey.apk`.
+2. Ouvrir le fichier téléchargé ; Android demande d'autoriser l'installation d'applications
+   depuis le navigateur ou le gestionnaire de fichiers : accepter pour cette source.
+3. Lancer « Fairy Mickey ». Le jeu se joue en paysage ; toucher l'écran pour commencer,
+   puis se déplacer avec la croix directionnelle en bas à gauche.
+
+Le code Android est dans `android/` et réutilise directement le moteur du jeu
+(`contracts`, `game`, `helpers`, `model`, `physics`) et les ressources de `src/main/resources`.
+Pour le compiler soi-même, il faut le SDK Android (par exemple via Android Studio) :
+ouvrir le dossier `android/` dans Android Studio, ou lancer `android/gradlew assembleDebug`.
+
 ## Commandes
 
 | Touche | Action |
 |---|---|
-| Flèches | Déplacer Mickey |
-| Échap | Quitter |
+| Flèches (desktop) / croix tactile (Android) | Déplacer Mickey |
+| Échap (desktop) / Retour (Android) | Quitter |
 
 Dans les décors « en ligne » (1D), seules deux directions sont actives
 (gauche/droite ou haut/bas selon le décor).

@@ -35,5 +35,7 @@ android {
     androidResources {
         // les mp3 ne sont pas utilisés par le jeu
         ignoreAssetsPattern '!*.mp3:!.svn:!.git:!.ds_store:!*.scc:.*:!CVS:!thumbs.db:!picasa.ini:!*~'
+        // MediaPlayer lit les musiques par descripteur de fichier : elles ne doivent pas être compressées
+        noCompress 'wav'
     }
 }
