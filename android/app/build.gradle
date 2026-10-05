@@ -1,0 +1,39 @@
+plugins {
+    id 'com.android.application'
+}
+
+// sources et ressources du jeu desktop, partagées sans copie
+def core = file('../../src/main')
+// packages du jeu qui ne dépendent ni d'AWT ni de Swing
+def corePackages = ['contracts', 'game', 'helpers', 'model', 'physics']
+
+android {
+    namespace 'com.antoine.android'
+    compileSdk 34
+
+    defaultConfig {
+        applicationId 'com.antoine.fairymickey'
+        minSdk 24
+        targetSdk 34
+        versionCode 1
+        versionName '0.1'
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_11
+        targetCompatibility JavaVersion.VERSION_11
+    }
+
+    sourceSets {
+        main {
+            java.srcDirs = ['src/main/java'] + corePackages.collect { "$core/java/com/antoine/$it" }
+            // json, images et musiques du jeu servis comme assets
+            assets.srcDirs = ["$core/resources"]
+        }
+    }
+
+    androidResources {
+        // les mp3 ne sont pas utilisés par le jeu
+        ignoreAssetsPattern '!*.mp3:!.svn:!.git:!.ds_store:!*.scc:.*:!CVS:!thumbs.db:!picasa.ini:!*~'
+    }
+}

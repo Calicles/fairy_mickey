@@ -10,3 +10,9 @@ out/
 # OS
 .DS_Store
 Thumbs.db
+
+# Android / Gradle
+android/.gradle/
+android/build/
+android/app/build/
+android/local.properties
