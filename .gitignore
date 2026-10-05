@@ -1,0 +1,12 @@
+# Build Maven / IntelliJ
+target/
+out/
+
+# IntelliJ (fichiers propres à chaque poste)
+.idea/workspace.xml
+.idea/shelf/
+.idea/usage.statistics.xml
+
+# OS
+.DS_Store
+Thumbs.db
