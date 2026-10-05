@@ -24,7 +24,7 @@ public class SoundEffect extends SoundMaker {
      */
     public SoundEffect(String musicPath, float volume, Command sound_end_cb ) {
         super(musicPath, volume);
-        samples = getAudioFileData();
+        samples = isMuted() ? new byte[0] : getAudioFileData();
         this.sound_end_cb = sound_end_cb;
     }
 
@@ -39,7 +39,7 @@ public class SoundEffect extends SoundMaker {
             byte[] buf;
             while (using) {
                 bytesRead = 0;
-                while ((bytesRead <= samples.length) && using) {
+                while (!isMuted() && (bytesRead <= samples.length) && using) {
                     buf = adjustVolume(bytesRead, 128);
                     bytesRead += buf.length;
                     line.write(buf, 0, buf.length);

@@ -131,10 +131,23 @@ public abstract class SoundMaker {
 
             line.start();
 
-        }catch (LineUnavailableException | IOException | UnsupportedAudioFileException e) {
+        }catch (LineUnavailableException | IllegalArgumentException e) {
+            // pas de périphérique audio utilisable : le lecteur devient muet au lieu d'empêcher le jeu
+            System.err.println("son désactivé (" + musicPath + ") : " + e.getMessage());
+            line = null;
+            try { if (ais != null) ais.close(); } catch (IOException ignored) {}
+            ais = null;
+        }catch (IOException | UnsupportedAudioFileException e) {
             e.printStackTrace();
             throw new RuntimeException("erreur de lecture du fichier de musique");
         }
+    }
+
+    /**
+     * @return true si aucun périphérique audio n'a pu être ouvert.
+     */
+    protected boolean isMuted(){
+        return line == null;
     }
 }
 

@@ -55,6 +55,8 @@ public class MusicPlayer extends SoundMaker {
     @Override
     protected Thread implementRun(){
         return new Thread(()-> {
+            // lecteur muet : on n'enchaîne pas les pistes, cela bouclerait sans fin
+            if (isMuted()) return;
             try {
                 int totalRead = 0;
                 byte bytes[] = new byte[1042];
