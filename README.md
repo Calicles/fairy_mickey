@@ -4,23 +4,38 @@ Petit jeu d'exploration en Java Swing : Mickey traverse des décors et ramasse d
 
 ## Prérequis
 
-- **JDK 8 ou plus récent** (testé avec Java 21) — `java -version` pour vérifier.
-- **Maven 3.6+** — `mvn -v` pour vérifier. Sans Maven, voir « Avec IntelliJ » plus bas.
+- **JDK 8 ou plus récent** (testé avec Java 21) : `java -version` pour vérifier.
+  Si la commande n'est pas reconnue, installer par exemple
+  [Eclipse Temurin](https://adoptium.net/) en cochant l'option *Set JAVA_HOME*.
+- **Maven n'est pas nécessaire** : le script `mvnw` (Maven Wrapper) le télécharge
+  automatiquement au premier lancement.
 
 ## Lancer le jeu
+
+Windows (PowerShell) :
+
+```powershell
+git clone https://github.com/Calicles/fairy_mickey.git   # ou : git pull origin main
+cd fairy_mickey
+.\mvnw.cmd package
+java -jar target\fairy_mickey.jar
+```
+
+Linux / macOS :
 
 ```bash
 git clone https://github.com/Calicles/fairy_mickey.git   # ou : git pull origin main
 cd fairy_mickey
-mvn package
+./mvnw package
 java -jar target/fairy_mickey.jar
 ```
 
-`mvn package` compile, lance les tests unitaires et produit `target/fairy_mickey.jar`,
+La commande `package` compile, lance les tests unitaires et produit `target/fairy_mickey.jar`,
 un jar autonome (environ 87 Mo à cause des musiques) qui contient tout ce qu'il faut.
 
-Pour reconstruire sans relancer les tests : `mvn package -DskipTests`.
-Pour lancer uniquement les tests : `mvn test`.
+Pour reconstruire sans relancer les tests : `.\mvnw.cmd package -DskipTests`.
+Pour lancer uniquement les tests : `.\mvnw.cmd test`.
+(Si Maven est installé, `mvn` remplace `.\mvnw.cmd` / `./mvnw`.)
 
 ### Avec IntelliJ
 
